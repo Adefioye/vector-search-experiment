@@ -1,0 +1,7 @@
+{"time":"2025-06-10T14:05:51.454495-05:00","level":"INFO","msg":"stream: starting","core version":"0.20.1","symlink path":"/Users/abdulhakeemadefioye/Desktop/IR/vector-search-experiment/wandb/run-20250610_140550-k1op7hdp/logs/debug-core.log"}
+{"time":"2025-06-10T14:05:51.890725-05:00","level":"INFO","msg":"stream: created new stream","id":"k1op7hdp"}
+{"time":"2025-06-10T14:05:51.890766-05:00","level":"INFO","msg":"stream: started","id":"k1op7hdp"}
+{"time":"2025-06-10T14:05:51.890798-05:00","level":"INFO","msg":"handler: started","stream_id":"k1op7hdp"}
+{"time":"2025-06-10T14:05:51.890828-05:00","level":"INFO","msg":"sender: started","stream_id":"k1op7hdp"}
+{"time":"2025-06-10T14:05:51.890832-05:00","level":"INFO","msg":"writer: Do: started","stream_id":"k1op7hdp"}
+{"time":"2025-06-10T14:05:52.199894-05:00","level":"INFO","msg":"Starting system monitor"}

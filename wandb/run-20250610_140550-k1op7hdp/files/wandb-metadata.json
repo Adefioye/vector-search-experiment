@@ -1,0 +1,48 @@
+{
+  "os":  "macOS-14.6-arm64-arm-64bit",
+  "python":  "CPython 3.10.18",
+  "startedAt":  "2025-06-10T19:05:51.453409Z",
+  "args":  [
+    "--dataset_name",
+    "scifact"
+  ],
+  "program":  "/Users/abdulhakeemadefioye/Desktop/IR/vector-search-experiment/evaluate_beir.py",
+  "codePath":  "evaluate_beir.py",
+  "git":  {
+    "remote":  "https://github.com/Adefioye/vector-search-experiment.git",
+    "commit":  "66573334e5058acdf44de8ca112acb26e78d535b"
+  },
+  "email":  "abdulhakeemadefioye@gmail.com",
+  "root":  "/Users/abdulhakeemadefioye/Desktop/IR/vector-search-experiment",
+  "host":  "Abdulhakeems-MacBook-Pro.local",
+  "executable":  "/opt/anaconda3/envs/vector-search/bin/python",
+  "codePathLocal":  "evaluate_beir.py",
+  "cpu_count":  16,
+  "cpu_count_logical":  16,
+  "disk":  {
+    "/":  {
+      "total":  "994662584320",
+      "used":  "237032402944"
+    },
+    "/System/Volumes/Data":  {
+      "total":  "994662584320",
+      "used":  "237032402944"
+    }
+  },
+  "memory":  {
+    "total":  "51539607552"
+  },
+  "cpu":  {
+    "count":  16,
+    "countLogical":  16
+  },
+  "apple":  {
+    "name":  "Apple M3 Max",
+    "ecpuCores":  4,
+    "pcpuCores":  12,
+    "gpuCores":  40,
+    "memoryGb":  48,
+    "swapTotalBytes":  "20401094656",
+    "ramTotalBytes":  "51539607552"
+  }
+}

@@ -1,0 +1,5 @@
+No sentence-transformers model found with name answerdotai/ModernBERT-base.
+The new embeddings will be initialized from a multivariate normal distribution that has old embeddings' mean and covariance. As described in this article: https://nlp.stanford.edu/~johnhew/vocab-expansion.html. To disable this, use `mean_resizing=False`
+The tokenizer does not support resizing the token embeddings, the prefixes token have not been added to vocabulary.
+100%|██████████████████████████████████████████████████████████████████████████| 5183/5183 [00:00<00:00, 282193.75it/s]
+Encoding documents (bs=2000):   0%|                                                              | 0/3 [00:00<?, ?it/s]

@@ -6,7 +6,11 @@ import argparse
 import os
 import json
 
+
 from pylate import evaluation, indexes, models, retrieve
+import wandb
+import pandas as pd
+
 
 if __name__ == "__main__":
     query_len = {
@@ -53,6 +57,18 @@ if __name__ == "__main__":
     OUTPUT_DIR = "outputs/"
     os.makedirs(OUTPUT_DIR, exist_ok=True)
     OUTPUT_PATH = os.path.join(OUTPUT_DIR, f"{model_name.split('/')[-1]}/{dataset_name}_scores.json")
+
+    ## Initialize Weights & Biases (wandb) for logging
+    wandb.init(
+        project="modernbert-beir-eval",  # change to whatever project name you like
+        name=f"{model_name.split('/')[-1]}-{dataset_name}",
+        config={
+            "dataset": dataset_name,
+            "model": model_name,
+        },
+        tags=["beir", dataset_name],
+        group=model_name.split("/")[-1],
+    )
 
     model = models.ColBERT(
         model_name_or_path=model_name,
@@ -125,3 +141,9 @@ if __name__ == "__main__":
         json.dump(evaluation_scores, f, indent=2)
 
     print(f"Evaluation scores saved to {OUTPUT_PATH}")
+
+    # Log to wandb Table
+    scores_table = pd.DataFrame([evaluation_scores])
+    wandb.log({"eval_scores": wandb.Table(dataframe=scores_table)})
+
+    wandb.finish()
