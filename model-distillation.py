@@ -34,6 +34,13 @@ from sentence_transformers.evaluation import EmbeddingSimilarityEvaluator
 from sentence_transformers.similarity_functions import SimilarityFunction
 from sentence_transformers.trainer import SentenceTransformerTrainer
 from sentence_transformers.training_args import SentenceTransformerTrainingArguments
+import wandb
+
+### Initialize Weights & Biases for experiment tracking
+wandb.init(
+    project="knowledge-distillation",
+)
+
 
 #### Just some code to print debug information to stdout
 logging.basicConfig(
