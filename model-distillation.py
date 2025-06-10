@@ -190,6 +190,7 @@ args = SentenceTransformerTrainingArguments(
     save_total_limit=2,
     logging_steps=100,
     run_name="modernbert-distillation-experiment",  # Will be used in W&B if `wandb` is installed
+    report_to="wandb",  # Set to "tensorboard" if you want to use TensorBoard
 )
 
 # Create the trainer & start training
