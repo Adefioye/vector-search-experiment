@@ -50,7 +50,7 @@ output_dir = "output/model-distillation-" + datetime.now().strftime("%Y-%m-%d_%H
 
 # We will train a small model like TinyBERT to imitate the teacher.
 # You can find some small BERT models here: https://huggingface.co/nreimers
-student_model_name = "nreimers/TinyBERT_L-4_H-312_v2"
+student_model_name = "microsoft/MiniLM-L12-H384-uncased"
 student_model = SentenceTransformer(student_model_name)
 
 inference_batch_size = 64
@@ -223,7 +223,7 @@ if "/" in student_model_name:
     student_model_name = student_model_name.split("/")[-1]
 if "/" in teacher_model_name:
     teacher_model_name = teacher_model_name.split("/")[-1]
-repo_id = f"kokolamba/TinyBERT_L-4_H-312-distilled-from-ModernBERT-base"
+repo_id = f"kokolamba/MiniLM-L12-H384-uncased-distilled-from-ModernBERT-base"
 try:
     student_model.push_to_hub(repo_id)
 except Exception:
