@@ -2,3 +2,5 @@
 evaluation_datasets/
 indexes/
 
+wandb/
+
