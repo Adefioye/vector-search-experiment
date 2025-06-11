@@ -37,9 +37,10 @@ def main():
     eval_dataset = dataset_dict["test"]
 
     # 3. Define a loss function
-    loss = CachedMultipleNegativesRankingLoss(model, mini_batch_size=16)  # Increase mini_batch_size if you have enough VRAM
+    # Original mini batch size is 16
+    loss = CachedMultipleNegativesRankingLoss(model, mini_batch_size=128)  # Increase mini_batch_size if you have enough VRAM
 
-    run_name = f"{model_shortname}-DPR-{lr}-CMNRL-bs512"
+    run_name = f"{model_shortname}-DPR-{lr}-CMNRL-minibs128"
     # 4. (Optional) Specify training arguments
     args = SentenceTransformerTrainingArguments(
         # Required parameter:
