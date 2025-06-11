@@ -10,10 +10,13 @@ pip install -r requirements.txt
 wandb login
 huggingface-cli login
 ```
-
+- Use the below to avoid mouse pasting ascii letters in the terninal
+```
+export TERM=xterm-256color
+```
 > Use `tmux` to manage code execution to avoid program shutting down when screen is off
 
 ## TODO
 ### Next steps
-- [ ] Perform knowledge distillation of `ModernBERT` (Ongoing)
+- [ ] Finetune using CMNRL(CachedMultipleNegativesRankingLoss) with batch size of 512 `ModernBERT-base` (Ongoing)
 - [ ] Evaluate the new model on BEIR & TREL datasets & MS Marco Dev (maybe!)
