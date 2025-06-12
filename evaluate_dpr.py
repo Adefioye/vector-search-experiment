@@ -3,6 +3,7 @@
 
 import mteb
 from sentence_transformers import SentenceTransformer
+from datetime import datetime
 
 import torch, gc
 
@@ -13,7 +14,7 @@ model_name = "kokolamba/ModernBERT-base-DPR-8e-05-CMNRL-minibs16"
 lr = 8e-5
 model_shortname = model_name.split("/")[-1]
 # run_name = f"{model_shortname}-DPR-{lr}"
-run_name = f"{model_shortname}"
+run_name = f"{datetime.now().strftime('%Y-%m-%d_%H-%M')}_{model_shortname}"
 output_dir = f"outputs/{model_shortname}/{run_name}/"
 model = SentenceTransformer(model_name, device="cuda")
 
