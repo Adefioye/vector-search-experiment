@@ -4,6 +4,11 @@
 import mteb
 from sentence_transformers import SentenceTransformer
 
+import torch, gc
+
+torch.cuda.empty_cache()
+gc.collect()
+
 model_name = "kokolamba/ModernBERT-base-DPR-8e-05-CMNRL-minibs16"
 lr = 8e-5
 model_shortname = model_name.split("/")[-1]
