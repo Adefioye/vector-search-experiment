@@ -20,4 +20,8 @@ model = SentenceTransformer(model_name, device="cuda")
 task_names = ["SciFact", "NFCorpus", "ArguAna", "SCIDOCS"]
 tasks = mteb.get_tasks(tasks=task_names)
 evaluation = mteb.MTEB(tasks=tasks)
-results = evaluation.run(model, output_folder=f"results/{run_name}")
+results = evaluation.run(
+    model,
+    output_folder=f"results/{run_name}"
+    encode_kwargs={"batch_size": 32}
+)
