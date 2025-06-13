@@ -13,11 +13,13 @@ from sentence_transformers.evaluation import TripletEvaluator
 from sentence_transformers.losses import CachedMultipleNegativesRankingLoss
 from sentence_transformers.training_args import BatchSamplers
 
+
+
 def main():
     # parse the lr & model name
     parser = argparse.ArgumentParser()
     parser.add_argument("--lr", type=float, default=8e-5)
-    parser.add_argument("--model_name", type=str, default="answerdotai/ModernBERT-base")
+    parser.add_argument("--model_name", type=str, default="answerdotai/ModernBERT-large")
     args = parser.parse_args()
     lr = args.lr
     model_name = args.model_name
