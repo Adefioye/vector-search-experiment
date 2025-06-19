@@ -10,7 +10,7 @@ import torch, gc
 torch.cuda.empty_cache()
 gc.collect()
 
-model_name = "kokolamba/ModernBERT-base-DPR-8e-05-CMNRL-minibs16"
+model_name = "kokolamba/ModernBERT-large-DPR-8e-05-CMNRL-minibs64"
 lr = 8e-5
 model_shortname = model_name.split("/")[-1]
 # run_name = f"{model_shortname}-DPR-{lr}"
@@ -24,5 +24,5 @@ evaluation = mteb.MTEB(tasks=tasks)
 results = evaluation.run(
     model,
     output_folder=f"results/{run_name}",
-    encode_kwargs={"batch_size": 32}
+    encode_kwargs={"batch_size": 64}
 )
