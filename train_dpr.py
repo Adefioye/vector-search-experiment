@@ -40,9 +40,9 @@ def main():
 
     # 3. Define a loss function
     # Original mini batch size is 16
-    loss = MultipleNegativesRankingLoss(model, mini_batch_size=128)  # Increase mini_batch_size if you have enough VRAM
+    loss = MultipleNegativesRankingLoss(model)  # Increase mini_batch_size if you have enough VRAM
 
-    run_name = f"{model_shortname}-DPR-{lr}-MNRL-minibs128"
+    run_name = f"{model_shortname}-DPR-{lr}-MNRL"
     # 4. (Optional) Specify training arguments
     args = SentenceTransformerTrainingArguments(
         # Required parameter:

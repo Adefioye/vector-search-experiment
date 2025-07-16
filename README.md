@@ -7,6 +7,7 @@ python -m venv venv
 source venv/bin/activate
 
 pip install -r requirements.txt
+MAX_JOBS=4 pip install flash-attn --no-build-isolation
 wandb login
 huggingface-cli login
 ```
