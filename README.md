@@ -9,7 +9,6 @@ source venv/bin/activate
 pip install -r requirements.txt
 wandb login
 huggingface-cli login
-export PYTORCH_CUDA_ALLOC_CONF=max_split_size_mb:128
 ```
 - Use the below to avoid mouse pasting ascii letters in the terninal
 ```
