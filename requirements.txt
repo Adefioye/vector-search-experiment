@@ -5,7 +5,7 @@ pandas
 datasets
 accelerate>=0.26.0
 mteb
-torch
-xformers==0.0.28.post3
+torch==2.7.0
 ninja
 packaging
+# xformers==0.0.28.post3
