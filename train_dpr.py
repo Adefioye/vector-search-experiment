@@ -10,7 +10,7 @@ from sentence_transformers import (
     SentenceTransformerTrainingArguments,
 )
 from sentence_transformers.evaluation import TripletEvaluator
-from sentence_transformers.losses import CachedMultipleNegativesRankingLoss
+from sentence_transformers.losses import CachedMultipleNegativesRankingLoss, MultipleNegativesRankingLoss
 from sentence_transformers.training_args import BatchSamplers
 
 
@@ -19,7 +19,7 @@ def main():
     # parse the lr & model name
     parser = argparse.ArgumentParser()
     parser.add_argument("--lr", type=float, default=8e-5)
-    parser.add_argument("--model_name", type=str, default="answerdotai/ModernBERT-large")
+    parser.add_argument("--model_name", type=str, default="answerdotai/ModernBERT-base")
     args = parser.parse_args()
     lr = args.lr
     model_name = args.model_name
@@ -40,9 +40,9 @@ def main():
 
     # 3. Define a loss function
     # Original mini batch size is 16
-    loss = CachedMultipleNegativesRankingLoss(model, mini_batch_size=128)  # Increase mini_batch_size if you have enough VRAM
+    loss = MultipleNegativesRankingLoss(model, mini_batch_size=128)  # Increase mini_batch_size if you have enough VRAM
 
-    run_name = f"{model_shortname}-DPR-{lr}-CMNRL-minibs128"
+    run_name = f"{model_shortname}-DPR-{lr}-MNRL-minibs128"
     # 4. (Optional) Specify training arguments
     args = SentenceTransformerTrainingArguments(
         # Required parameter:
