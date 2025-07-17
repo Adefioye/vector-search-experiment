@@ -3,7 +3,11 @@
 evaluation_datasets/
 indexes/
 
+# Folders to ignore when training
 wandb/
 venv/
 output/
+
+# Folders to ignore when doing evals
+indices/
 
