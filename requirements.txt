@@ -8,12 +8,9 @@ datasets
 accelerate>=0.26.0
 mteb
 torch
-<<<<<<< HEAD
 xformers==0.0.28.post3
-=======
 pyserini
 pyserini[optional]
-faiss-cpu
->>>>>>> f70f8d3 (Update README with notes for testing)
+faiss-gpu
 # ninja
 # packaging
