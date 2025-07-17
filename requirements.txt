@@ -1,3 +1,4 @@
+wheel
 sentence-transformers
 wandb
 transformers
