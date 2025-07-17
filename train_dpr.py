@@ -13,6 +13,10 @@ from sentence_transformers.evaluation import TripletEvaluator
 from sentence_transformers.losses import CachedMultipleNegativesRankingLoss, MultipleNegativesRankingLoss
 from sentence_transformers.training_args import BatchSamplers
 
+import torch
+torch.cuda.empty_cache()
+torch.cuda.ipc_collect()
+
 
 
 def main():
@@ -26,7 +30,7 @@ def main():
     model_shortname = model_name.split("/")[-1]
 
     # 1. Load a model to finetune
-    model = SentenceTransformer(model_name)
+    model = SentenceTransformer(model_name, trust_remote_code=True)
 
     # 2. Load a dataset to finetune on
     dataset = load_dataset(
@@ -40,17 +44,17 @@ def main():
 
     # 3. Define a loss function
     # Original mini batch size is 16
-    loss = MultipleNegativesRankingLoss(model)  # Increase mini_batch_size if you have enough VRAM
+    loss = CachedMultipleNegativesRankingLoss(model, mini_batch_size=128)  # Increase mini_batch_size if you have enough VRAM
 
-    run_name = f"{model_shortname}-DPR-{lr}-MNRL"
+    run_name = f"{model_shortname}-DPR-{lr}-CMNRL-bs128-minibs128"
     # 4. (Optional) Specify training arguments
     args = SentenceTransformerTrainingArguments(
         # Required parameter:
         output_dir=f"output/{model_shortname}/{run_name}",
         # Optional training parameters:
         num_train_epochs=1,
-        per_device_train_batch_size=512,
-        per_device_eval_batch_size=512,
+        per_device_train_batch_size=128,
+        per_device_eval_batch_size=128,
         warmup_ratio=0.05,
         fp16=False,  # Set to False if GPU can't handle FP16
         bf16=True,  # Set to True if GPU supports BF16
@@ -92,6 +96,10 @@ def main():
 
     # 9. (Optional) Push it to the Hugging Face Hub
     model.push_to_hub(run_name, private=False)
+
+    # 10. (Optional) Clear the cache to free up VRAM
+    torch.cuda.empty_cache()
+    torch.cuda.ipc_collect()
 
 if __name__ == "__main__":
     main()
