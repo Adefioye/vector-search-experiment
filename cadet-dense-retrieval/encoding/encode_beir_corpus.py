@@ -98,7 +98,11 @@ def main():
     args = parser.parse_args()
 
     tokenizer = get_tokenizer(args.model_name)
-    emb_model = EmbeddingModelWrapper(args.model_name, normalize=args.normalize, pooling=args.pooling).cuda().eval()
+    # add back .cuda().eval() if you want to use GPU
+    if torch.cuda.is_available():
+        emb_model = EmbeddingModelWrapper(args.model_name, normalize=args.normalize, pooling=args.pooling).cuda().eval()
+    else:
+        emb_model = EmbeddingModelWrapper(args.model_name, normalize=args.normalize, pooling=args.pooling).eval()
 
     dataset = args.dataset
     passage_token_len = 512
@@ -134,7 +138,8 @@ def main():
     model_path = args.model_name.replace('/', '_')
 
     if not os.path.exists('indices/' + model_path + "_" + dataset + '_index'):
-        os.mkdir('indices/' + model_path + "_" + dataset + '_index')
+        os.makedirs('indices/' + model_path + "_" + dataset + '_index', exist_ok=True)
+
 
     with torch.no_grad():
         docid_file = open('indices/' + model_path + "_" + dataset + '_index/docid', 'w', encoding='utf-8')
