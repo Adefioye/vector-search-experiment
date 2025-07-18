@@ -34,24 +34,24 @@ bash setup_eval_env.sh
 
 
 ```
-python cadet-dense-retrieval/encoding/encode_beir_corpus.py --model_name answerdotai/ModernBERT-base --normalize --pooling cls --batch_size 1800 --dataset scifact
+python cadet-dense-retrieval/encoding/encode_beir_corpus.py --model_name kokolamba/ModernBERT-base-DPR-8e-05-CMNRL-minibs128 --normalize --pooling cls --batch_size 1800 --dataset scifact
 
     python -m pyserini.search.faiss \
     --threads 16 --batch-size 512 \
     --encoder-class auto \
-    --encoder answerdotai/ModernBERT-base --l2-norm --query-prefix "query: "\
-    --index indices/answerdotai_ModernBERT-base_scifact_index \
+    --encoder kokolamba/ModernBERT-base-DPR-8e-05-CMNRL-minibs128 --l2-norm --query-prefix "query: "\
+    --index indices/kokolamba_ModernBERT-base-DPR-8e-05-CMNRL-minibs128_scifact_index \
     --topics beir-v1.0.0-scifact-test \
-    --output results/run.beir.ModernBERT-base.scifact.txt \
+    --output results/run.beir.ModernBERT-base-DPR-8e-05-CMNRL-minibs128.scifact.txt \
     --hits 1000 --remove-query
 
     python -m pyserini.eval.trec_eval \
     -c -m ndcg_cut.10 beir-v1.0.0-scifact-test \
-    results/run.beir.ModernBERT-base.scifact.txt
+    results/run.beir.ModernBERT-base-DPR-8e-05-CMNRL-minibs128.scifact.txt
 
     python -m pyserini.eval.trec_eval \
     -c -m recall.100 beir-v1.0.0-scifact-test \
-    results/run.beir.ModernBERT-base.scifact.txt
+    results/run.beir.ModernBERT-base-DPR-8e-05-CMNRL-minibs128.scifact.txt
 
     rm -r indices/answerdotai_ModernBERT-base_scifact_index
 
