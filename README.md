@@ -39,20 +39,53 @@ python cadet-dense-retrieval/encoding/encode_beir_corpus.py --model_name answerd
     python -m pyserini.search.faiss \
     --threads 16 --batch-size 512 \
     --encoder-class auto \
-    --encoder models/answerdotai/ModernBERT-base --l2-norm --query-prefix "Represent this sentence for searching relevant passages: " \
-    --index indices/models_ModernBERT-base_scifact_index \
+    --encoder answerdotai/ModernBERT-base --l2-norm --query-prefix "query: "\
+    --index indices/answerdotai_ModernBERT-base_scifact_index \
     --topics beir-v1.0.0-scifact-test \
-    --output run.beir.ModernBERT-base.scifact.txt \
+    --output results/run.beir.ModernBERT-base.scifact.txt \
     --hits 1000 --remove-query
 
     python -m pyserini.eval.trec_eval \
     -c -m ndcg_cut.10 beir-v1.0.0-scifact-test \
-    run.beir.ModernBERT-base.scifact.txt
+    results/run.beir.ModernBERT-base.scifact.txt
 
     python -m pyserini.eval.trec_eval \
     -c -m recall.100 beir-v1.0.0-scifact-test \
-    run.beir.ModernBERT-base.scifact.txt
+    results/run.beir.ModernBERT-base.scifact.txt
 
-    rm -r indices/models_ModernBERT-base_scifact_index
+    rm -r indices/answerdotai_ModernBERT-base_scifact_index
+
+```
+
+2. Try this instead
+```
+python -m pyserini.encode \
+  --input beir-v1.0.0-scifact/corpus.jsonl \
+  --output indices/ModernBERT-scifact_index \
+  --encoder answerdotai/ModernBERT-base \
+  --pooling cls \
+  --l2-norm
+
+python -m pyserini.search.faiss \
+  --threads 16 --batch-size 512 \
+  --encoder-class auto \
+  --encoder answerdotai/ModernBERT-base \
+  --l2-norm \
+  --query-prefix "query: " \
+  --index indices/ModernBERT-scifact_index \
+  --topics beir-v1.0.0-scifact-test \
+  --output results/run.ModernBERT.scifact.txt \
+  --hits 1000 \
+  --remove-query
+
+  # nDCG@10
+python -m pyserini.eval.trec_eval \
+  -c -m ndcg_cut.10 beir-v1.0.0-scifact-test \
+  results/run.ModernBERT.scifact.txt
+
+# Recall@100
+python -m pyserini.eval.trec_eval \
+  -c -m recall.100 beir-v1.0.0-scifact-test \
+  results/run.ModernBERT.scifact.txt
 
 ```

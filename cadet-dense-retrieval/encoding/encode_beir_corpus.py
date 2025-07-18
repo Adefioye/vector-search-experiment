@@ -109,7 +109,7 @@ def main():
     batch_size = args.batch_size
 
     passages = []
-    ds = load_dataset("BeIR/" + dataset, "corpus")['corpus']; id_key='_id'
+    ds = load_dataset(f"BeIR/{dataset}", "corpus")['corpus']; id_key='_id'
     for line in tqdm(ds):        
         passage_dict = {}
         passage_dict['docid'] = str(line[id_key])
