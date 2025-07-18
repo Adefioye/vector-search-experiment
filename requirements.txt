@@ -21,4 +21,3 @@ pyserini
 torch
 pyserini[optional]
 numpy==1.26.4
-faiss-gpu
