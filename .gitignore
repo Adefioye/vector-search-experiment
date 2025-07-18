@@ -11,3 +11,5 @@ output/
 # Folders to ignore when doing evals
 indices/
 
+# Add miniconda.sh to the ignore list
+miniconda.sh
