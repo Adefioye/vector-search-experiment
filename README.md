@@ -1,6 +1,4 @@
-
-
-# Set up
+# Set up environment for training
 - Create a virtual environment
 ```
 python -m venv venv
@@ -9,14 +7,6 @@ source venv/bin/activate
 
 ```
 pip install -r requirements.txt
-# [linux only] cuda 11.8 version
-pip3 install -U xformers --index-url https://download.pytorch.org/whl/cu118
-# [linux & win] cuda 12.6 version
-pip3 install -U xformers --index-url https://download.pytorch.org/whl/cu126
-# [linux & win] cuda 12.8 version
-pip3 install -U xformers --index-url https://download.pytorch.org/whl/cu128
-# [linux only] (EXPERIMENTAL) rocm 6.3 version
-pip3 install -U xformers --index-url https://download.pytorch.org/whl/rocm6.3
 MAX_JOBS=4 pip install flash-attn --no-build-isolation
 wandb login
 huggingface-cli login
@@ -26,6 +16,16 @@ huggingface-cli login
 export TERM=xterm-256color
 ```
 > Use `tmux` to manage code execution to avoid program shutting down when screen is off
+
+# Setup environment for evals
+1. When doing evals with pyserini, setup environment with the following:
+- Install miniconda and setup eval environment
+```
+chmod +x install_miniconda.sh
+source ~/.bashrc
+chmod +x setup_eval_env.sh
+bash setup_eval_env.sh
+```
 
 ## TODO
 ### Next steps
