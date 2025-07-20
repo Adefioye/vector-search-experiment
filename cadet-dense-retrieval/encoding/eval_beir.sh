@@ -2,7 +2,7 @@ for dataset in 'trec-covid' 'nfcorpus' 'fiqa' 'scidocs' 'arguana' 'webis-touche2
     model = nomic-ai/modernbert-embed-base
     model_name = modernbert-embed-base
 
-    python3 encode_corpus.py --model_name ${model} --normalize --pooling cls --batch_size 1800 --dataset ${dataset}
+    python encode_corpus.py --model_name ${model} --normalize --pooling cls --batch_size 1800 --dataset ${dataset}
 
     python -m pyserini.search.faiss \
     --threads 16 --batch-size 512 \
@@ -26,7 +26,7 @@ for dataset in 'trec-covid' 'nfcorpus' 'fiqa' 'scidocs' 'arguana' 'webis-touche2
     model = nomic-ai/modernbert-embed-base-unsupervised
     model_name = modernbert-embed-base-unsupervised
 
-    python3 encode_corpus.py --model_name ${model} --normalize --pooling cls --batch_size 1800 --dataset ${dataset}
+    python encode_corpus.py --model_name ${model} --normalize --pooling cls --batch_size 1800 --dataset ${dataset}
 
     python -m pyserini.search.faiss \
     --threads 16 --batch-size 512 \
@@ -51,7 +51,7 @@ for dataset in 'trec-covid' 'nfcorpus' 'fiqa' 'scidocs' 'arguana' 'webis-touche2
     model = nomic-ai/nomic-embed-text-v1-unsupervised
     model_name = nomic-embed-text-v1-unsupervised
 
-    python3 encode_corpus.py --model_name ${model} --normalize --pooling cls --batch_size 1800 --dataset ${dataset}
+    python encode_corpus.py --model_name ${model} --normalize --pooling cls --batch_size 1800 --dataset ${dataset}
 
     python -m pyserini.search.faiss \
     --threads 16 --batch-size 512 \
