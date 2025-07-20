@@ -12,7 +12,8 @@ for dataset in 'trec-covid' 'nfcorpus' 'fiqa' 'scidocs' 'arguana' 'webis-touche2
     --index indices/${model_prefix}_${model_name}_${dataset}_index \
     --topics beir-v1.0.0-${dataset}-test \
     --output results/run.beir.${model_name}.${dataset}.txt \
-    --hits 1000 --remove-query
+    --hits 1000 --remove-query \
+    --device cuda:0
 
     python -m pyserini.eval.trec_eval \
     -c -m ndcg_cut.10 beir-v1.0.0-${dataset}-test \
@@ -36,7 +37,8 @@ for dataset in 'trec-covid' 'nfcorpus' 'fiqa' 'scidocs' 'arguana' 'webis-touche2
     --index indices/${model_prefix}_${model_name}_${dataset}_index \
     --topics beir-v1.0.0-${dataset}-test \
     --output results/run.beir.${model_name}.${dataset}.txt \
-    --hits 1000 --remove-query
+    --hits 1000 --remove-query \
+    --device cuda:0
 
     python -m pyserini.eval.trec_eval \
     -c -m ndcg_cut.10 beir-v1.0.0-${dataset}-test \
@@ -60,7 +62,8 @@ for dataset in 'trec-covid' 'nfcorpus' 'fiqa' 'scidocs' 'arguana' 'webis-touche2
     --index indices/${model_prefix}_${model_name}_${dataset}_index \
     --topics beir-v1.0.0-${dataset}-test \
     --output results/run.beir.${model_name}.${dataset}.txt \
-    --hits 1000 --remove-query
+    --hits 1000 --remove-query \
+    --device cuda:0
 
     python -m pyserini.eval.trec_eval \
     -c -m ndcg_cut.10 beir-v1.0.0-${dataset}-test \
@@ -84,7 +87,8 @@ for dataset in 'trec-covid' 'nfcorpus' 'fiqa' 'scidocs' 'arguana' 'webis-touche2
     --index indices/${model_prefix}_${model_name}_${dataset}_index \
     --topics beir-v1.0.0-${dataset}-test \
     --output results/run.beir.${model_name}.${dataset}.txt \
-    --hits 1000 --remove-query
+    --hits 1000 --remove-query \
+    --device cuda:0
 
     python -m pyserini.eval.trec_eval \
     -c -m ndcg_cut.10 beir-v1.0.0-${dataset}-test \
