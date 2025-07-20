@@ -8,7 +8,7 @@ set -e
 conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/main
 conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/r
 
-# Create conda environment with Python 3.10
+# Create conda environment with Python 3.11
 echo "Creating conda environment with Python 3.10..."
 conda create -n pyserini python=3.11 -y
 
