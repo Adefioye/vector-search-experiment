@@ -1,12 +1,13 @@
-for dataset in 'trec-covid' 'nfcorpus' 'fiqa' 'scidocs' 'arguana' 'webis-touche2020'  'dpbedia-entity' 'climate-fever' 'scifact'; do
-    model_name=${dataset}_bge_embedding_model
+for dataset in 'trec-covid' 'nfcorpus' 'fiqa' 'scidocs' 'arguana' 'webis-touche2020'  'dpbedia-entity' 'climate-fever' 'scifact' 'cqadupstack'; do
+    model = nomic-ai/modernbert-embed-base
+    model_name = modernbert-embed-base
 
-    python3 encode_corpus.py --model_name models/${model_name} --normalize --pooling cls --batch_size 1800 --dataset ${dataset}
+    python3 encode_corpus.py --model_name ${model} --normalize --pooling cls --batch_size 1800 --dataset ${dataset}
 
     python -m pyserini.search.faiss \
     --threads 16 --batch-size 512 \
     --encoder-class auto \
-    --encoder models/${model_name} --l2-norm --query-prefix "Represent this sentence for searching relevant passages: " \
+    --encoder ${model} --l2-norm --query-prefix "search_query: " \
     --index indices/models_${model_name}_${dataset}_index \
     --topics beir-v1.0.0-${dataset}-test \
     --output run.beir.${model_name}.${dataset}.txt \
@@ -22,38 +23,15 @@ for dataset in 'trec-covid' 'nfcorpus' 'fiqa' 'scidocs' 'arguana' 'webis-touche2
 
     rm -r indices/models_${model_name}_${dataset}_index
 
-    model_name=${dataset}_snowflake_embedding_model
+    model = nomic-ai/modernbert-embed-base-unsupervised
+    model_name = modernbert-embed-base-unsupervised
 
-    python3 encode_corpus.py --model_name models/${model_name} --normalize --pooling cls --batch_size 1800 --dataset ${dataset}
+    python3 encode_corpus.py --model_name ${model} --normalize --pooling cls --batch_size 1800 --dataset ${dataset}
 
     python -m pyserini.search.faiss \
     --threads 16 --batch-size 512 \
     --encoder-class auto \
-    --encoder models/${model_name} --l2-norm --query-prefix "Represent this sentence for searching relevant passages: " \
-    --index indices/models_${model_name}_${dataset}_index \
-    --topics beir-v1.0.0-${dataset}-test \
-    --output run.beir.${model_name}.${dataset}.txt \
-    --hits 1000 --remove-query
-
-
-    python -m pyserini.eval.trec_eval \
-    -c -m ndcg_cut.10 beir-v1.0.0-${dataset}-test \
-    run.beir.${model_name}.${dataset}.txt
-
-    python -m pyserini.eval.trec_eval \
-    -c -m recall.100 beir-v1.0.0-${dataset}-test \
-    run.beir.${model_name}.${dataset}.txt
-
-    rm -r indices/models_${model_name}_${dataset}_index
-
-    model_name=${dataset}_gte_embedding_model
-
-    python3 encode_corpus.py --model_name models/${model_name} --normalize --pooling cls --batch_size 1800 --dataset ${dataset}
-    
-    python -m pyserini.search.faiss \
-    --threads 16 --batch-size 512 \
-    --encoder-class auto \
-    --encoder models/${model_name} --l2-norm --query-prefix "" \
+    --encoder ${model} --l2-norm --query-prefix "search_query: " \
     --index indices/models_${model_name}_${dataset}_index \
     --topics beir-v1.0.0-${dataset}-test \
     --output run.beir.${model_name}.${dataset}.txt \
@@ -70,12 +48,40 @@ for dataset in 'trec-covid' 'nfcorpus' 'fiqa' 'scidocs' 'arguana' 'webis-touche2
 
     rm -r indices/models_${model_name}_${dataset}_index
 
-    model='e5'
-    python3 encode_corpus_e5.py --model_name models/${model_name} --normalize --pooling mean --batch_size 1800 --dataset ${dataset}
+    model = nomic-ai/nomic-embed-text-v1-unsupervised
+    model_name = nomic-embed-text-v1-unsupervised
+
+    python3 encode_corpus.py --model_name ${model} --normalize --pooling cls --batch_size 1800 --dataset ${dataset}
+
     python -m pyserini.search.faiss \
     --threads 16 --batch-size 512 \
     --encoder-class auto \
-    --encoder models/${model_name} --pooling mean --l2-norm --query-prefix "query: " \
+    --encoder ${model} --l2-norm --query-prefix "search_query: " \
+    --index indices/models_${model_name}_${dataset}_index \
+    --topics beir-v1.0.0-${dataset}-test \
+    --output run.beir.${model_name}.${dataset}.txt \
+    --hits 1000 --remove-query
+
+
+    python -m pyserini.eval.trec_eval \
+    -c -m ndcg_cut.10 beir-v1.0.0-${dataset}-test \
+    run.beir.${model_name}.${dataset}.txt
+
+    python -m pyserini.eval.trec_eval \
+    -c -m recall.100 beir-v1.0.0-${dataset}-test \
+    run.beir.${model_name}.${dataset}.txt
+
+    rm -r indices/models_${model_name}_${dataset}_index
+
+    model = nomic-ai/nomic-embed-text-v1
+    model_name = nomic-embed-text-v1
+
+    python3 encode_corpus.py --model_name ${model} --normalize --pooling cls --batch_size 1800 --dataset ${dataset}
+
+    python -m pyserini.search.faiss \
+    --threads 16 --batch-size 512 \
+    --encoder-class auto \
+    --encoder ${model} --l2-norm --query-prefix "search_query: " \
     --index indices/models_${model_name}_${dataset}_index \
     --topics beir-v1.0.0-${dataset}-test \
     --output run.beir.${model_name}.${dataset}.txt \

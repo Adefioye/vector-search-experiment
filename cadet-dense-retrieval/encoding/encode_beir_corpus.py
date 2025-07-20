@@ -119,6 +119,14 @@ def main():
         if "e5" in args.model_name.lower():
             text = "passage: " + text
 
+        # Add prefix for nomic-embed and modernbert-embed
+        if "nomic-embed" in args.model_name.lower():
+            text = "search_document: " + text
+        if "modernbert-embed" in args.model_name.lower():
+            text = "search_document: " + text
+
+        
+
         passage_dict['text'] = text
         passages.append(passage_dict)
     
