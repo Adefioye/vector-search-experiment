@@ -95,4 +95,6 @@ for dataset in 'trec-covid' 'nfcorpus' 'fiqa' 'scidocs' 'arguana' 'webis-touche2
     results/run.beir.${model_name}.${dataset}.txt
 
     rm -r indices/${model_prefix}_${model_name}_${dataset}_index
+
+    echo "Completed evaluation for dataset: ${dataset}"
 done
