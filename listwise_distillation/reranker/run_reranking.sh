@@ -30,7 +30,7 @@ do
     continue
   fi
 
-  python run_reranking.py \
+  python reranking.py \
     --model_name "$model_name" \
     --input_path "$input_path" \
     --output_path "$output_path"

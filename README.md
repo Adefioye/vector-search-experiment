@@ -99,12 +99,6 @@ python -m pyserini.eval.trec_eval \
 - Run `test_bge_beir.sh`, produces `results/run.beir.${model_name}.${dataset}.txt`
 - Create `json/jsonl` for queries and corpus file using `run_generate_beir_json.sh`
 - Convert  `initial trec result` to `jsonl` by running `run_trec_to_jsonl.py`
-- Run reranker (Add path to rerank_input and rerank_output)
-```
-python run_reranking.py \
-  --model_name Soyoung97/RankT5-base \
-  --input_path rerank_inputs/${dataset}.jsonl \
-  --output_path rerank_outputs/${dataset}.rankt5.jsonl
-```
+- Run reranker using `run_reranking.sh`
 - Convert reranked `jsonl` to `trec` using `run_jsonl_to_trec.py`
 - Run eval using pyserini using `reranker_eval.sh`
