@@ -10,14 +10,14 @@ def main():
     args = parser.parse_args()
     dataset = args.dataset
 
-    print(f"[📥] Loading dataset BeIR/{dataset} ...")
-    ds = load_dataset(f"BeIR/{dataset}", "corpus")
-
-    output_dir = f"beir/{dataset}"
+    # Don't name output_dir as beir/dataset to avoid data being fetched locally
+    output_dir = f"beir_datasets/{dataset}"
     os.makedirs(output_dir, exist_ok=True)
 
     # Save queries as JSON
-    queries = ds["queries"]
+    print(f"[📥] Loading queries for BeIR/{dataset} ...")
+    queries = load_dataset(f"BeIR/{dataset}", 'queries')["queries"]
+    print(queries)
     query_dict = {q["_id"]: q["text"] for q in queries}
     query_path = os.path.join(output_dir, "queries.json")
     with open(query_path, "w") as f:
@@ -25,8 +25,10 @@ def main():
     print(f"[✅] Saved queries to {query_path}")
 
     # Save corpus as JSONL
-    corpus = ds["corpus"]
+    print(f"[📥] Loading corpus BeIR/{dataset} ...")
+    corpus = load_dataset(f"BeIR/{dataset}", "corpus")["corpus"]
     corpus_path = os.path.join(output_dir, "corpus.jsonl")
+
     with open(corpus_path, "w") as f:
         for item in tqdm(corpus, desc="Writing corpus"):
             docid = item["_id"]

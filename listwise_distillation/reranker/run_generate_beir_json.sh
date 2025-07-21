@@ -2,7 +2,7 @@
 
 # List of BEIR datasets
 datasets=(
-  "trec-covid"
+#   "trec-covid"
   "nfcorpus"
 #   "fiqa"
 #   "scidocs"
@@ -19,5 +19,5 @@ SCRIPT_PATH="generate_beir_json.py"
 for dataset in "${datasets[@]}"
 do
   echo "Processing dataset: $dataset"
-  python $SCRIPT_PATH --dataset "$dataset"
+  python $SCRIPT_PATH --dataset $dataset
 done
