@@ -87,3 +87,33 @@ python -m pyserini.eval.trec_eval \
   run.nomic-embed.scifact.txt
 
 ```
+
+## IDEATING for Reranking:
+1. Converting TREC input `results/run.beir.${model_name}.${dataset}.txt` to `results/rerank.beir.${model_name}.${dataset}.jsonl` output.
+2. Use `results/run.beir.${model_name}.${dataset}.jsonl` as input into a __reranker__.
+3. Reranker generates `jsonl` output and then convert back to `trec` format for eval purposes.
+
+
+### Steps
+- Run `test_bge_beir.sh`
+- Convert trec to jsonl(Create json for topics and corpus file)
+```
+trec_to_jsonl(
+    run_path="runs/bge-base.<dataset>.trec",
+    query_path="beir/<dataset>/queries.json",
+    corpus_path="beir/<dataset>/corpus.jsonl",
+    output_jsonl="rerank_inputs/<dataset>.jsonl",
+    topk=100
+)
+```
+- Run reranker (Add path to rerank_input and rerank_output)
+```
+python run_reranking.py \
+  --model_name Soyoung97/RankT5-base \
+  --input_path rerank_inputs/<dataset>.jsonl \
+  --output_path rerank_outputs/<dataset>.rankt5.jsonl
+```
+- Convert reranked jsonl to trec
+```
+jsonl_to_trec("rerank_outputs/<dataset>.rankt5.jsonl", "runs/rankt5.<dataset>.trec")
+```
