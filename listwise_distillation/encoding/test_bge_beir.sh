@@ -5,7 +5,6 @@ for dataset in 'nfcorpus' 'scidocs' 'arguana' 'scifact'; do
 
     python encode_corpus.py --model_name ${model} --normalize --pooling mean --batch_size 1800 --dataset ${dataset}
 
-    export TRANSFORMERS_TRUST_REMOTE_CODE=1qq
     python -m pyserini.search.faiss \
     --threads 16 --batch-size 512 \
     --encoder-class auto \
