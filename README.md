@@ -95,13 +95,15 @@ python -m pyserini.eval.trec_eval \
 
 
 ### Steps
-- Run `test_bge_beir.sh`
-- Convert trec to jsonl(Create json for topics and corpus file)
+### We start by using BAAI/bge-base-en-v1.5 to reproduce paper results then nomic-ai/modernbert-embed-base
+- Run `test_bge_beir.sh`, produces `results/run.beir.${model_name}.${dataset}.txt`
+- Create `json/jsonl` for queries and corpus file using `run_generate_beir_json.sh`
+- Convert trec to jsonl
 ```
 trec_to_jsonl(
-    run_path="runs/bge-base.<dataset>.trec",
-    query_path="beir/<dataset>/queries.json",
-    corpus_path="beir/<dataset>/corpus.jsonl",
+    run_path="results/run.beir.${model_name}.${dataset}.txt",
+    query_path="beir_datasets/<dataset>/queries.json",
+    corpus_path="beir_datasets/<dataset>/corpus.jsonl",
     output_jsonl="rerank_inputs/<dataset>.jsonl",
     topk=100
 )
@@ -115,5 +117,17 @@ python run_reranking.py \
 ```
 - Convert reranked jsonl to trec
 ```
-jsonl_to_trec("rerank_outputs/<dataset>.rankt5.jsonl", "runs/rankt5.<dataset>.trec")
+jsonl_to_trec("rerank_outputs/<dataset>.rankt5.jsonl", "results/run.rankt5.${model_name}.${dataset}.txt")
+```
+- Run eval using pyserini
+```
+  # nDCG@10
+python -m pyserini.eval.trec_eval \
+  -c -m ndcg_cut.10 beir-v1.0.0-${dataset}-test \
+  results/run.rankt5.${model_name}.${dataset}.txt
+
+# Recall@100
+python -m pyserini.eval.trec_eval \
+  -c -m recall.100 beir-v1.0.0-scifact-test \
+  results/run.rankt5.${model_name}.${dataset}.txt
 ```
