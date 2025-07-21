@@ -1,8 +1,11 @@
-for dataset in 'nfcorpus' 'scidocs' 'arguana' 'scifact'; do
+for dataset in 'nfcorpus' 'scifact'; do
     model=BAAI/bge-base-en-v1.5
     model_name=bge-base-en-v1.5
     model_prefix=BAAI
-    
+
+    # Datasets
+    #'nfcorpus' 'scidocs' 'arguana' 'scifact'
+
     # Change the querie back to 'search_query: ' for consistency
     # Also change --pooling to 'mean' for better performance on these datasets
     # model=nomic-ai/nomic-embed-text-v1

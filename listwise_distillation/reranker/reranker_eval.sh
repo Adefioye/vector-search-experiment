@@ -2,14 +2,14 @@
 
 # List of BEIR datasets
 datasets=(
-  "trec-covid"
   "nfcorpus"
-  "fiqa"
-  "scidocs"
-  "arguana"
-  "webis-touche2020"
-  "climate-fever"
   "scifact"
+  # "trec-covid"
+  # "fiqa"
+  # "scidocs"
+  # "arguana"
+  # "webis-touche2020"
+  # "climate-fever"
 )
 
 # Specify your model name (change this as appropriate)

@@ -9,14 +9,14 @@ sys.path.append(base_path)
 
 # === Configuration ===
 datasets = [
-    "trec-covid",
     "nfcorpus",
-    "fiqa",
-    "scidocs",
-    "arguana",
-    "webis-touche2020",
-    "climate-fever",
-    "scifact"
+    "scifact",
+    # "trec-covid",
+    # "fiqa",
+    # "scidocs",
+    # "arguana",
+    # "webis-touche2020",
+    # "climate-fever"
 ]
 
 # BAAI/bge-base-en-v1.5

@@ -2,14 +2,14 @@
 
 # List of BEIR datasets
 datasets=(
-#   "trec-covid"
   "nfcorpus"
-#   "fiqa"
-#   "scidocs"
-#   "arguana"
-#   "webis-touche2020"
-#   "climate-fever"
-#   "scifact"
+  "scifact"
+  # "trec-covid"
+  # "fiqa"
+  # "scidocs"
+  # "arguana"
+  # "webis-touche2020"
+  # "climate-fever"
 )
 
 # Path to your Python script
