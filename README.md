@@ -60,32 +60,30 @@ python cadet-dense-retrieval/encoding/encode_beir_corpus.py --model_name kokolam
 2. Try this instead
 ```
 python -m pyserini.encode \
-  --input beir-v1.0.0-scifact/corpus.jsonl \
-  --output indices/ModernBERT-scifact_index \
-  --encoder answerdotai/ModernBERT-base \
-  --pooling cls \
-  --l2-norm
+  --input tests/resources/simple_scifact.json \
+  --output indices/nomic-embed-scifact_index \
+  --encoder nomic-ai/nomic-embed-text-v1
 
 python -m pyserini.search.faiss \
   --threads 16 --batch-size 512 \
   --encoder-class auto \
-  --encoder answerdotai/ModernBERT-base \
+  --encoder nomic-ai/nomic-embed-text-v1 \
   --l2-norm \
-  --query-prefix "query: " \
-  --index indices/ModernBERT-scifact_index \
+  --query-prefix "search_query: " \
+  --index indices/nomic-embed-scifact_index \
   --topics beir-v1.0.0-scifact-test \
-  --output results/run.ModernBERT.scifact.txt \
+  --output run.nomic-embed.scifact.txt \
   --hits 1000 \
   --remove-query
 
   # nDCG@10
 python -m pyserini.eval.trec_eval \
   -c -m ndcg_cut.10 beir-v1.0.0-scifact-test \
-  results/run.ModernBERT.scifact.txt
+  run.nomic-embed.scifact.txt
 
 # Recall@100
 python -m pyserini.eval.trec_eval \
   -c -m recall.100 beir-v1.0.0-scifact-test \
-  results/run.ModernBERT.scifact.txt
+  run.nomic-embed.scifact.txt
 
 ```
