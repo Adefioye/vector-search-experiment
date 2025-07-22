@@ -15,10 +15,14 @@
 
 # For evals
 wheel
-transformers
+transformers==4.44.2
 pyserini
 torch
 pyserini[optional]
 numpy==1.26.4
 datasets<=3.6.0
 einops
+jsonlines
+FlagEmbedding
+flash_attn
+

@@ -32,20 +32,22 @@ class RerankerModel(torch.nn.Module):
         self.monot5_true_false_tokens = [1176, 6136]  # "▁true", "▁false"
         self.rankt5_extra_id_10 = 32089              # <extra_id_10>
 
-        if 'rankt5' in self.model_name:
+        if 'rankt5' in self.model_name.lower():
+            print(f"[🔍] Using RankT5 model: {model_name}")
             self.model_type = 'rankt5'
             self.model = T5ForConditionalGeneration.from_pretrained(model_name).to(device).eval()
             self.tokenizer = AutoTokenizer.from_pretrained(model_name)
-        elif 'monot5' in self.model_name:
+        elif 'monot5' in self.model_name.lower():
             self.model_type = 'monot5'
             self.model = T5ForConditionalGeneration.from_pretrained(model_name).to(device).eval()
             self.tokenizer = AutoTokenizer.from_pretrained(model_name)
-        elif 'bge-reranker' in self.model_name:
+        elif 'bge-reranker' in self.model_name.lower():
+            print(f"[🔍] Using BGE Reranker model: {model_name}")
             self.model_type = 'bge_reranker'
             # BGE-specific
             self.tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
             self.tokenizer.padding_side = 'right'
-            self.model = AutoModelForCausalLM.from_pretrained(model_name, trust_remote_code=True, torch_dtype=torch.float16).to(self.device).eval()
+            self.model = AutoModelForCausalLM.from_pretrained(model_name, trust_remote_code=True, torch_dtype=torch.float16, force_download=True).to(self.device).eval()
         else:
             # Fallback to sequence classifier (e.g., cross-encoder)
             self.model_type = 'sequence_classifier'
@@ -61,12 +63,14 @@ class RerankerModel(torch.nn.Module):
             scores = log_probs[:, 0].tolist()
 
         elif self.model_type == 'rankt5':
+            print(f"[🔍] Using RankT5 model: {self.model_name}")
             # rankt5
             output = self.model.generate(**batch, max_length=2, return_dict_in_generate=True, output_scores=True)
             scores_tensor = torch.stack(output.scores)
             scores = scores_tensor[0][:, self.rankt5_extra_id_10].tolist()
 
         elif self.model_type == 'bge_reranker':
+            print(f"[🔍] Using BGE Reranker model: {self.model_name}")
             # bge-reranker
             query_lengths = batch.pop("query_lengths")
             prompt_lengths = batch.pop("prompt_lengths")

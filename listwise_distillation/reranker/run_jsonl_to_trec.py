@@ -1,10 +1,10 @@
 import os
 import sys
-from reranker.rerank_utils import jsonl_to_trec
+from rerank_utils import jsonl_to_trec
 
 # Add reranker/ directory to PYTHONPATH
 # On cloud GPU, use /workspace/vector-search-experiment/listwise_distillation
-base_path = os.path.expanduser("/workspace/vector-search-experiment/listwise_distillation")
+base_path = os.path.expanduser("/workspace/vector-search-experiment/listwise_distillation/reranker")
 sys.path.append(base_path)
 
 # === Configuration ===
@@ -26,8 +26,8 @@ model_name = "bge-base-en-v1.5"  # or any other model you're evaluating
 for dataset in datasets:
     print(f"[🔁] Converting {dataset} rerank JSONL to TREC...")
 
-    input_jsonl = f"rerank_outputs/${dataset}.rankt5.jsonl"
-    output_trec = f"results/run.rankt5.${model_name}.${dataset}.txt"
+    input_jsonl = f"rerank_outputs/{dataset}.rankt5.jsonl"
+    output_trec = f"../encoding/results/run.rankt5.{model_name}.{dataset}.txt"
 
     if not os.path.exists(input_jsonl):
         print(f"[⚠️] Missing {input_jsonl}, skipping...")

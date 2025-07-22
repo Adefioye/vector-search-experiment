@@ -1,6 +1,6 @@
 import os
 import sys
-from reranker.rerank_utils import trec_to_jsonl
+from rerank_utils import trec_to_jsonl
 
 # Add reranker/ directory to PYTHONPATH
 # On cloud GPU, use /workspace/vector-search-experiment/listwise_distillation
@@ -26,7 +26,7 @@ topk = 100
 for dataset in datasets:
     print(f"\n[🚀] Running trec_to_jsonl for dataset: {dataset}")
 
-    run_path = f"results/run.beir.{model_name}.{dataset}.txt"
+    run_path = f"../encoding/results/run.beir.{model_name}.{dataset}.txt"
     query_path = f"beir_datasets/{dataset}/queries.json"
     corpus_path = f"beir_datasets/{dataset}/corpus.jsonl"
     output_jsonl = f"rerank_inputs/{dataset}.jsonl"

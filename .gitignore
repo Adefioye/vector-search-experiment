@@ -10,6 +10,11 @@ output/
 
 # Folders to ignore when doing evals
 indices/
+listwise_distillation/reranker/beir_datasets/
+listwise_distillation/reranker/rerank_inputs/
+listwise_distillation/reranker/rerank_outputs/
+listwise_distillation/encoding/results/
+__pycache__/
 
 # Add miniconda.sh to the ignore list
 miniconda.sh
