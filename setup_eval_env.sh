@@ -26,6 +26,9 @@ conda run -n pyserini conda install -c pytorch faiss-gpu -y
 echo "Installing pip requirements..."
 conda run -n pyserini pip install --upgrade pip
 
+# Install torch explicitly first as flash_attn requires it
+conda run -n pyserini pip install torch
+
 # Make sure faiss-gpu is REMOVED from requirements.txt before this step
 conda run -n pyserini pip install -r requirements.txt
 

@@ -91,7 +91,7 @@ python -m pyserini.eval.trec_eval \
 ## IDEATING for Reranking:
 1. Converting TREC input `results/run.beir.${model_name}.${dataset}.txt` to `results/rerank.beir.${model_name}.${dataset}.jsonl` output.
 2. Use `results/run.beir.${model_name}.${dataset}.jsonl` as input into a __reranker__.
-3. Reranker generates `jsonl` output and then convert back to `trec` format for eval purposes.
+3. Reranker generates `jsonl` output and then convert back to `trec` format for eval purposes.d
 
 
 ### Steps

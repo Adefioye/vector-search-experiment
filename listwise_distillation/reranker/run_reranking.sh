@@ -13,7 +13,7 @@ datasets=(
 )
 
 # Model to use
-model_name="Soyoung97/RankT5-base"
+model_name="Soyoung97/RankT5-3b"
 # model_name="BAAI/bge-reranker-v2.5-gemma2-lightweight"
 
 # Loop over each dataset
