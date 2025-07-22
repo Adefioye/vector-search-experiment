@@ -101,4 +101,4 @@ python -m pyserini.eval.trec_eval \
 - Convert  `initial trec result` to `jsonl` by running `run_trec_to_jsonl.py`
 - Run reranker using `run_reranking.sh`
 - Convert reranked `jsonl` to `trec` using `run_jsonl_to_trec.py`
-- Run eval using pyserini using `reranker_eval.sh`
+- Run eval using pyserini using `rerank_eval.sh`

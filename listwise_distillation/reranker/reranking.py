@@ -131,62 +131,23 @@ class RerankerModel(torch.nn.Module):
 
         elif self.model_type == 'rankt5':
             # rankt5 style input
-            # Below is pointwise scoring which is not ideal for RankT5 and listwise scoring is used during training.
-            # input_texts = [f"Query: {q} Document: {d}" for (q, d) in pairs]
-            # encodings = self.tokenizer(
-            #     input_texts,
-            #     return_tensors='pt',
-            #     padding=True,
-            #     truncation=True,
-            #     max_length=max_length
-            # ).to(self.device)
+            input_texts = [f"Query: {q} Document: {d}" for (q, d) in pairs]
+            encodings = self.tokenizer(
+                input_texts,
+                return_tensors='pt',
+                padding=True,
+                truncation=True,
+                max_length=max_length
+            ).to(self.device)
 
-            # with torch.no_grad():
-            #     with torch.amp.autocast(device_type="cuda", dtype=torch.bfloat16, enabled=(self.device == 'cuda')):
-            #         for start in tqdm(range(0, len(pairs), batch_size), desc="Scoring"):
-            #             end = start + batch_size
-            #             batch_encodings = {k: v[start:end] for k, v in encodings.items()}
-            #             batch_scores = self.forward(batch_encodings)
-            #             scores.extend(batch_scores)
-            
-            # ---------- LIST-WISE  ----------
-            scores = []
-            # RankT5 authors used groups of 5 passages, but any N works
-            group_size = batch_size      # reuse --batch_size as "list length"
-
-            def group(lst, n):
-                for i in range(0, len(lst), n):
-                    yield lst[i : i + n]
-
-            for passage_group in tqdm(group(pairs, group_size), desc="Scoring"):
-                # Build one long prompt that contains the query + N passages
-                q_text = passage_group[0][0]              # same query for group
-                all_passages_text = [
-                    f"Document{i}: {d}" for i, (_, d) in enumerate(passage_group)
-                ]
-                prompt = "Query: " + q_text + " " + " ".join(all_passages_text)
-
-                enc = self.tokenizer(
-                    prompt,
-                    return_tensors="pt",
-                    truncation=True,
-                    max_length=max_length,
-                    padding="max_length"
-                ).to(self.device)
-
-                with torch.no_grad():
-                    with torch.amp.autocast(device_type="cuda", dtype=torch.bfloat16, enabled=(self.device == 'cuda')):
-                        out = self.model.generate(
-                            **enc,
-                            max_length=2,
-                            return_dict_in_generate=True,
-                            output_scores=True
-                        )
-                # first generation step – take logit for <extra_id_0>
-                first_step_logits = out.scores[0][0]          # (vocab,)
-                top_score = first_step_logits[self.rankt5_extra_id_10].item()
-                # give same score to every passage in the group
-                scores.extend([top_score] * len(passage_group))
+            with torch.no_grad():
+                with torch.amp.autocast(device_type="cuda", dtype=torch.bfloat16, enabled=(self.device == 'cuda')):
+                    for start in tqdm(range(0, len(pairs), batch_size), desc="Scoring"):
+                        end = start + batch_size
+                        batch_encodings = {k: v[start:end] for k, v in encodings.items()}
+                        batch_scores = self.forward(batch_encodings)
+                        scores.extend(batch_scores)
+    
 
         elif self.model_type == 'bge_reranker':
             # bge-reranker
