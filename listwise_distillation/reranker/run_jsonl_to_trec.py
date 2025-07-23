@@ -20,7 +20,7 @@ datasets = [
 ]
 
 # BAAI/bge-base-en-v1.5
-model_name = "bge-base-en-v1.5"  # or any other model you're evaluating
+model_name = "nomic-embed-text-v1"  # or any other model you're evaluating
 
 # === Conversion Loop ===
 for dataset in datasets:

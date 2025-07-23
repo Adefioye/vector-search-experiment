@@ -13,7 +13,7 @@ datasets=(
 )
 
 # Specify your model name (change this as appropriate)
-model_name="bge-base-en-v1.5"
+model_name="nomic-embed-text-v1"
 
 # Loop through each dataset
 for dataset in "${datasets[@]}"
