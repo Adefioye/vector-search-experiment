@@ -27,7 +27,7 @@ for dataset in datasets:
     print(f"[🔁] Converting {dataset} rerank JSONL to TREC...")
 
     input_jsonl = f"rerank_outputs/{dataset}.rankt5.jsonl"
-    output_trec = f"../encoding/results/run.rankt5.{model_name}.{dataset}.txt"
+    output_trec = f"results/run.rankt5.{model_name}.{dataset}.txt"
 
     if not os.path.exists(input_jsonl):
         print(f"[⚠️] Missing {input_jsonl}, skipping...")

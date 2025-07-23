@@ -22,7 +22,7 @@ do
   echo "Evaluating dataset: $dataset"
   echo "============================================"
 
-  run_file="../encoding/results/run.rankt5.${model_name}.${dataset}.txt"
+  run_file="results/run.rankt5.${model_name}.${dataset}.txt"
 
   if [[ ! -f "$run_file" ]]; then
     echo "[⚠️] Run file $run_file not found. Skipping..."

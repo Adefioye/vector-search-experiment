@@ -18,6 +18,10 @@ listwise_distillation/reranker/rerank_inputs/
 listwise_distillation/reranker/rerank_outputs/
 listwise_distillation/encoding/results/
 __pycache__/
+beir_datasets/
+rerank_inputs/
+rerank_outputs/
+results/
 
 # Add miniconda.sh to the ignore list
 miniconda.sh

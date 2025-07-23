@@ -31,7 +31,7 @@ do
     continue
   fi
 
-  python reranking.py \
+  python listwise_distillation/reranker/reranking.py \
     --model_name "$model_name" \
     --input_path "$input_path" \
     --output_path "$output_path" 
