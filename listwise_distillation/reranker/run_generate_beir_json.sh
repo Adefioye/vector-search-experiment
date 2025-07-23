@@ -2,7 +2,7 @@
 
 # List of BEIR datasets
 datasets=(
-  "nfcorpus"
+  # "nfcorpus"
   "scifact"
   # "trec-covid"
   # "fiqa"

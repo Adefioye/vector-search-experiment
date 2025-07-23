@@ -23,9 +23,10 @@ export TERM=xterm-256color
 ```
 chmod +x install_miniconda.sh
 source ~/.bashrc
-chmod +x setup_eval_env.sh
-bash setup_eval_env.sh
+chmod +x setup_dev_env.sh
+bash setup_dev_env.sh
 ```
+2. Make sure to add `trust_remote_code=True` for AutoDocumentEncoder and AutoQueryEncoder
 
 ## TODO
 ### Next steps
