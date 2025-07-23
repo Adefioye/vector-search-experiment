@@ -12,7 +12,7 @@ for dataset in 'nfcorpus' 'scifact'; do
     model_name=nomic-embed-text-v1
     model_prefix=nomic-ai
 
-    python encode_corpus.py --model_name ${model} --normalize --pooling mean --batch_size 1800 --dataset ${dataset}
+    python listwise_distillation/encoding/encode_corpus.py --model_name ${model} --normalize --pooling mean --batch_size 1800 --dataset ${dataset}
 
     python -m pyserini.search.faiss \
     --threads 16 --batch-size 512 \

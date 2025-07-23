@@ -97,7 +97,7 @@ python -m pyserini.eval.trec_eval \
 
 ### Steps
 ### We start by using BAAI/bge-base-en-v1.5 to reproduce paper results then nomic-ai/modernbert-embed-base
-- Run `test_bge_beir.sh`, produces `results/run.beir.${model_name}.${dataset}.txt`
+- Run `test_bge_beir.sh`, produces `results/run.beir.${model_name}.${dataset}.txt` (NOTE: `Add model_name in this file`)
 - Create `json/jsonl` for queries and corpus file using `run_generate_beir_json.sh`
 - Convert  `initial trec result` to `jsonl` by running `run_trec_to_jsonl.py` (NOTE: `Add model_name in this file`)
 - Run reranker using `run_reranking.sh`

@@ -2,6 +2,12 @@
 #
 # One-shot script to create a conda env + dev builds of Anserini + Pyserini
 #
+
+# Accept ToS for Anaconda channels
+# Remove these lines (not supported on macOS)
+conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/main
+conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/r
+
 set -euo pipefail
 
 ENV_NAME=pyserini-dev
@@ -25,8 +31,8 @@ fi
 
 echo "🔨  Building Anserini fat JAR ..."
 pushd "$LIBS/anserini" >/dev/null
-mvn clean package -Dmaven.test.skip=true
-(cd tools/eval && tar xf trec_eval.9.0.4.tar.gz && cd trec_eval.9.0.4 && make)
+conda run -n $ENV_NAME mvn clean package -Dmaven.test.skip=true
+(cd tools/eval && tar --no-same-owner -xvzf trec_eval.9.0.4.tar.gz && cd trec_eval.9.0.4 && make)
 (cd tools/eval/ndeval && make)
 popd >/dev/null
 
@@ -39,7 +45,7 @@ fi
 
 echo "🔧  Compiling trec_eval / ndeval helpers ..."
 pushd "$LIBS/pyserini" >/dev/null
-(cd tools/eval && tar xf trec_eval.9.0.4.tar.gz && cd trec_eval.9.0.4 && make)
+(cd tools/eval && tar --no-same-owner -xvzf trec_eval.9.0.4.tar.gz && cd trec_eval.9.0.4 && make)
 (cd tools/eval/ndeval && make)
 conda run -n $ENV_NAME pip install -e .
 popd >/dev/null
