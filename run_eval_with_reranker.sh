@@ -1,7 +1,7 @@
 # Create trec results per model
 echo "Running trec results generation for each model in the list..."
-chmod +x listwise_distillation/encoding/test_bge_beir.sh
-bash listwise_distillation/encoding/test_bge_beir.sh
+chmod +x listwise_distillation/encoding/eval_beir.sh
+bash listwise_distillation/encoding/eval_beir.sh
 
 # Create json/jsonl for queries and corpus file for BEIR datasets
 echo "Generating JSON/JSONL files for queries and corpus..."
