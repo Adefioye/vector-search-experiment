@@ -1,4 +1,6 @@
-for dataset in 'nfcorpus' 'scifact'; do
+for dataset in 'trec-covid' 'fiqa' 'scidocs' 'arguana' 'webis-touche2020' 'climate-fever'; do
+    # TODO: Add the 2 datasets later
+    # 'nfcorpus' 'scifact'
     # model=BAAI/bge-base-en-v1.5
     # model_name=bge-base-en-v1.5
     # model_prefix=BAAI
