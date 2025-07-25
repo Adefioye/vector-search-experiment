@@ -1,6 +1,6 @@
 import os
 import sys
-from rerank_utils import trec_to_jsonl
+from listwise_distillation.reranker.reranking_scripts.rerank_utils import trec_to_jsonl
 
 # Add reranker/ directory to PYTHONPATH
 # On cloud GPU, use /workspace/vector-search-experiment/listwise_distillation
