@@ -15,7 +15,8 @@
 
 # For evals
 wheel
-transformers==4.44.2
+#transformers==4.44.2
+transformers>=4.48.0
 numpy==1.26.4
 datasets<=3.6.0
 einops
