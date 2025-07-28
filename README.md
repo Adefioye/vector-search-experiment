@@ -37,6 +37,8 @@ bash setup_dev_env.sh
 
 
 ### Steps
+
+## Running evals with or without rerankers
 1. Run evals on base retriever and reranker. Script `run_eval_with_reranker.sh` executes all steps below:
   - Run `test_bge_beir.sh`, produces `results/run.beir.${model_name}.${dataset}.txt` (NOTE: `Add model_name in this file`)
   - Create `json/jsonl` for queries and corpus file using `run_generate_beir_json.sh`
@@ -45,3 +47,21 @@ bash setup_dev_env.sh
   - Convert reranked `jsonl` to `trec` using `run_jsonl_to_trec.py` (NOTE: `Add model_name in this file`)
   - Run eval using pyserini using `rerank_eval.sh` (NOTE: `Add model_name in this file`)
 2. Run evals for single retrieval purposes. Script `run_eval_without_reranker.sh`.
+
+## Filtering synthetic queries (IDEATING)
+
+1. Generates top100 hits using `bash bge_retrieve.sh`
+2. Generate ignore list using `corpora_deduplication.py` and `msmarco_get_train_ids.py`[DONE I SUPPOSE]
+3. Filter each run to produce synthetic queries whose passage ranks first in the top20 using `retriever_filtering_step.py`
+4. Generate reranker input jsonl using `generate_jsonl_for_reranking.py` (Might not need this for finetuning. Perhaps only applicable to `general retrieval model in the paper`)
+
+>NOTE:
+1. Might need to add `rank > 20 break`
+```
+if (pid not in disregard_ids):
+    vals[3] = str(rank)
+    rank += 1
+    step_one_filtered_lines.append(' '.join(vals).strip())
+```
+2. Create `msmarco_examples.tsv` needed for few-shot msmarco synthetic queries.
+3. 
