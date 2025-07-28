@@ -30,15 +30,15 @@ class Config:
         self.rank_temp = 0.05
         self.kl_temp = 0.3
         self.contrastive_loss_weight = 0.1
-        self.instruction = "query: "
+        self.instruction = "search_query: "
         self.query_maxlength = 64
         self.text_maxlength = 512
         self.num_epochs = 30
         self.weight_decay = 0.01
-        self.model_name_or_path = 'intfloat/e5-base-unsupervised'
+        self.model_name_or_path = 'nomic-ai/nomic-embed-text-v1'
         self.save_model = True
         self.threshold_score = 0.6
-        self.save_model_name = f"{self.dataset}_e5_embedding_model"
+        self.save_model_name = f"{self.dataset}_nomic-embed-text-v1"
         self.train_file_path = f'../RankT5/beir.bge.{self.dataset}.train.generated_queries.listwise.jsonl'
         self.dev_file_path = f'../RankT5/beir.bge.{self.dataset}.dev.generated_queries.listwise.jsonl'
         
@@ -149,7 +149,7 @@ def load_dataset(file_path, list_length):
             queries.append(rankings_dict['query'])
             passages = rankings_dict['passages'][:list_length]
             for passage in passages:
-                passage_lists_texts.append("passage: " + passage['text'])
+                passage_lists_texts.append("search_document: " + passage['text'])
                 passage_lists_ids.append(passage['docid'])
                 passage_lists_scores.append(passage['rankt5_score'])
 
