@@ -5,6 +5,7 @@ import pickle
 import random
 import time
 from itertools import product
+import wandb
 
 import numpy as np
 import torch
@@ -340,11 +341,24 @@ class Trainer:
                 running_contrastive_train_loss += contrastive_loss_val.detach().item()
                 running_rank_train_loss += listwise_loss_val.detach().item()
 
+                # Compute virtual training step
+                virtual_step = (step + 1) // self.config.accumulation_steps
+
+                # log losses to wandb
+                wandb.log({
+                    "train/contrastive_loss": contrastive_loss_val.detach().item(),
+                    "train/rank_loss": listwise_loss_val.detach().item(),
+                    "train/learning_rate": self.optimizer.param_groups[0]['lr'],
+                    "train/joint_loss": loss.detach().item(),
+                }, step=virtual_step)
+
         avg_contrastive_loss = running_contrastive_train_loss / num_train_batches
         avg_rank_loss = running_rank_train_loss / num_train_batches
 
         print("TRAIN CONTRASTIVE LOSS", avg_contrastive_loss)
         print("TRAIN RANK LOSS", avg_rank_loss)
+
+        return avg_contrastive_loss, avg_rank_loss
 
     def evaluate(self, dev_dataloader):
         self.model.eval()
@@ -414,6 +428,14 @@ def main():
     args = parser.parse_args()
 
     config = Config(dataset=args.dataset)
+
+     # ─── START W&B ──────────────────────────────
+    wandb.init(
+        project="nomic-embed-listwise-retrieval",       
+        name=f"{config.dataset}-nomic-embed-v1" 
+    )
+    wandb.config.update(vars(config))         # log all hyperparams
+    # ─── END W&B ────────────────────────────────
 
     tokenizer = AutoTokenizer.from_pretrained(config.model_name_or_path)
 
@@ -487,17 +509,17 @@ def main():
     trainer = Trainer(emb_model, optimizer, lr_scheduler, config)
 
     for epoch in range(config.num_epochs + 1):
-        print(f"Epoch {epoch}/{config.num_epochs}")
-        avg_contrastive_loss, avg_rank_loss = trainer.evaluate(dev_dataloader)
+        print("Evaluating on dev set for epoch", epoch)
+        avg_contrastive_loss_dev, avg_rank_loss_dev = trainer.evaluate(dev_dataloader)
 
         trainer.non_improvement_count += 1
 
-        if (avg_rank_loss < trainer.best_rank_dev_loss):
-            trainer.best_rank_dev_loss = avg_rank_loss
+        if (avg_rank_loss_dev < trainer.best_rank_dev_loss):
+            trainer.best_rank_dev_loss = avg_rank_loss_dev
             trainer.non_improvement_count = 0
 
-        if ((avg_contrastive_loss*config.contrastive_loss_weight + avg_rank_loss) < trainer.best_overall_dev_loss):
-            trainer.best_overall_dev_loss = avg_contrastive_loss*config.contrastive_loss_weight + avg_rank_loss
+        if ((avg_contrastive_loss_dev * config.contrastive_loss_weight + avg_rank_loss_dev) < trainer.best_overall_dev_loss):
+            trainer.best_overall_dev_loss = avg_contrastive_loss_dev * config.contrastive_loss_weight + avg_rank_loss_dev
             trainer.non_improvement_count = 0
 
             if config.save_model:
@@ -513,8 +535,18 @@ def main():
 
         if epoch == config.num_epochs:
             break
-
-        trainer.train(train_dataloader)
+        print("TRAINING for epoch", epoch)
+        avg_contrastive_loss_train, avg_rank_loss_train = trainer.train(train_dataloader)
+        # Do per-epoch logging for joint loss
+        wandb.log({
+            "epoch": epoch,
+            "avg_contrastive_loss_train": avg_contrastive_loss_train,
+            "avg_rank_loss_train": avg_rank_loss_train,
+            "avg_contrastive_loss_dev": avg_contrastive_loss_dev,
+            "avg_rank_loss_dev": avg_rank_loss_dev,
+            "avg_overall_loss_dev": avg_contrastive_loss_dev * config.contrastive_loss_weight + avg_rank_loss_dev,
+            "avg_overall_loss_train": avg_contrastive_loss_train * config.contrastive_loss_weight + avg_rank_loss_train,
+        })
 
 if __name__ == "__main__":
     main()
