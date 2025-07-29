@@ -539,14 +539,13 @@ def main():
         avg_contrastive_loss_train, avg_rank_loss_train = trainer.train(train_dataloader)
         # Do per-epoch logging for joint loss
         wandb.log({
-            "epoch": epoch,
-            "avg_contrastive_loss_train": avg_contrastive_loss_train,
-            "avg_rank_loss_train": avg_rank_loss_train,
-            "avg_contrastive_loss_dev": avg_contrastive_loss_dev,
-            "avg_rank_loss_dev": avg_rank_loss_dev,
-            "avg_overall_loss_dev": avg_contrastive_loss_dev * config.contrastive_loss_weight + avg_rank_loss_dev,
-            "avg_overall_loss_train": avg_contrastive_loss_train * config.contrastive_loss_weight + avg_rank_loss_train,
-        })
+            "train/avg_contrastive_loss": avg_contrastive_loss_train,
+            "train/avg_rank_loss": avg_rank_loss_train,
+            "train/avg_overall_loss": avg_contrastive_loss_train * config.contrastive_loss_weight + avg_rank_loss_train,
+            "dev/avg_contrastive_loss": avg_contrastive_loss_dev,
+            "dev/avg_rank_loss": avg_rank_loss_dev,
+            "dev/avg_overall_loss": avg_contrastive_loss_dev * config.contrastive_loss_weight + avg_rank_loss_dev,
+        }, step=epoch)
 
 if __name__ == "__main__":
     main()

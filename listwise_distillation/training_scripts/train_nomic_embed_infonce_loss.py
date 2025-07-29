@@ -30,7 +30,6 @@ class Config:
         self.lr = 2e-4
         self.rank_temp = 0.05
         self.kl_temp = 0.3
-        self.contrastive_loss_weight = 0.1
         self.instruction = "search_query: "
         self.query_maxlength = 64
         self.text_maxlength = 512
@@ -500,7 +499,6 @@ def main():
             "train/avg_infonce_loss": avg_contrastive_loss_train,
             "dev/avg_infonce_loss": avg_contrastive_loss_dev,
             "best/avg_infonce_loss": trainer.best_overall_dev_loss,
-            "epoch": epoch,
         }, step=epoch)
 
 if __name__ == "__main__":
