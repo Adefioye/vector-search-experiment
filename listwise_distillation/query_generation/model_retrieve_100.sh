@@ -24,7 +24,7 @@ for query_type in 'keywords' 'titles' 'claims' 'questions' 'random' 'msmarco'; d
       --encoder-class auto --encoder ${model} --l2-norm --query-prefix "search_query: " \
       --index indices/${model_prefix}_${model_name}_${dataset}_index \
       --topics listwise_distillation/query_generation/generated_queries/${dataset}_generated_queries_${query_type}.tsv \
-      --output listwise_distillation/query_generation/retrieval_runs/run.${model_name}.${dataset}.generated-queries-${query_type}.txt \
+      --output listwise_distillation/query_generation/retrieval_runs/run.${model_name}.${dataset}.generated-queries-${query_type}_100.txt \
       --hits 100
       --device cuda:0
 done
@@ -42,7 +42,7 @@ for dataset in 'fiqa' 'scifact' 'trec-covid' 'nfcorpus' 'arguana' 'webis-touche2
       --encoder-class auto --encoder ${model} --l2-norm --query-prefix "search_query: " \
       --index indices/${model_prefix}_${model_name}_${dataset}_index \
       --topics listwise_distillation/query_generation/generated_queries/${dataset}_generated_queries_${query_type}.tsv \
-      --output listwise_distillation/query_generation/retrieval_runs/run.${model_name}.${dataset}.generated-queries-${query_type}.txt \
+      --output listwise_distillation/query_generation/retrieval_runs/run.${model_name}.${dataset}.generated-queries-${query_type}_100.txt \
       --hits 100
       --device cuda:0
   done
