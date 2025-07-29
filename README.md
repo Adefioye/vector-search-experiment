@@ -31,14 +31,17 @@ bash setup_dev_env.sh
 ## TODO
 ### Next steps
 - [x] Run evals on `nomic-embed-text-v1` and reranker `RankT5-3b` using `NDCG@10`.
-- [ ] Run evals on `nomic-embed-text-v1-unsupervised`, `modernbert-embed-base-unsupervised` and `modernbert-embed-base` using `NDCG@10` and `Recall@100`
+- [x] Run evals on `nomic-embed-text-v1-unsupervised`, `modernbert-embed-base-unsupervised` and `modernbert-embed-base` using `NDCG@10` and `Recall@100`
 - [ ] Create synthetic queries 
-- [ ] Finetune on specific __BEIR__ datasets using contrastive and listwise distillation loss and evaluate performance using `NDCG@10` and `Recall@100`
+- [ ] Finetune on specific __Scifact__,  __FiQA__, __TREC-Covid__, __NFCorpus__, and __MSMARCO__ datasets using contrastive and listwise distillation loss and evaluate performance using `NDCG@10` and `Recall@100`
+- [ ] If combined loss(contrastive + listwise distillation) is better, Finetune on all `8 datasets` we did eval on retrieval and reranking on.
+- [ ] Finetune supervised and unsupervised model on the different query types and evaluate on `DL19, DL20, Scifact, FiQA, TREC-Covid, NFCorpus and MSMARCO` using `NDCG@10`, __Table 4__.
+- [ ] Finetune supervised and unsupervised model on `human written` vs `synthetic` queries and evaluate on `DL19, DL20, Scifact, FiQA, TREC-Covid, NFCorpus and MSMARCO` using `NDCG@10`, __Table 5__.
 
 
 ### Steps
 
-## Running evals with or without rerankers
+### Running evals with or without rerankers
 1. Run evals on base retriever and reranker. Script `run_eval_with_reranker.sh` executes all steps below:
   - Run `test_bge_beir.sh`, produces `results/run.beir.${model_name}.${dataset}.txt` (NOTE: `Add model_name in this file`)
   - Create `json/jsonl` for queries and corpus file using `run_generate_beir_json.sh`
@@ -48,12 +51,12 @@ bash setup_dev_env.sh
   - Run eval using pyserini using `rerank_eval.sh` (NOTE: `Add model_name in this file`)
 2. Run evals for single retrieval purposes. Script `run_eval_without_reranker.sh`.
 
-## Filtering synthetic queries (IDEATING)
-
-1. Generates top100 hits using `bash bge_retrieve.sh`
-2. Generate ignore list using `corpora_deduplication.py` and `msmarco_get_train_ids.py`[DONE I SUPPOSE]
-3. Filter each run to produce synthetic queries whose passage ranks first in the top20 using `retriever_filtering_step.py`
-4. Generate reranker input jsonl using `generate_jsonl_for_reranking.py` (Might not need this for finetuning. Perhaps only applicable to `general retrieval model in the paper`)
+### Filtering synthetic queries (IDEATING)
+1. Generate synthetic queries for all datasets by running all scripts in `query_generation/query_gen_scripts` folder.
+2. Generates top100 hits using `bash bge_retrieve.sh`
+3. Generate ignore list using `corpora_deduplication.py` and `msmarco_get_train_ids.py`[DONE I SUPPOSE]
+4. Filter each run to produce synthetic queries whose passage ranks first in the top20 using `retriever_filtering_step.py`
+5. Generate reranker input jsonl using `generate_jsonl_for_reranking.py` (Might not need this for finetuning. Perhaps only applicable to `general retrieval model in the paper`)
 
 >NOTE:
 1. Might need to add `rank > 20 break`
@@ -64,4 +67,7 @@ if (pid not in disregard_ids):
     step_one_filtered_lines.append(' '.join(vals).strip())
 ```
 2. Create `msmarco_examples.tsv` needed for few-shot msmarco synthetic queries.
-3. 
+
+### Finetuning
+1. For `infonce loss`, use `train_nomic_embed_infonce_loss.py`.
+2. For `infonce + listwise loss`, use `train_nomic_embed_joint_loss.py`.
