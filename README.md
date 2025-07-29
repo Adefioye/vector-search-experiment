@@ -71,3 +71,12 @@ if (pid not in disregard_ids):
 ### Finetuning
 1. For `infonce loss`, use `train_nomic_embed_infonce_loss.py`.
 2. For `infonce + listwise loss`, use `train_nomic_embed_joint_loss.py`.
+
+# TODO
+To generate synthetic queries
+- `python listwise_distillation/query_gen_scripts/claims_gen_vllm.py`
+- `python listwise_distillation/query_gen_scripts/keywords_gen_vllm.py`
+- `python listwise_distillation/query_gen_scripts/msmarco_query_gen_vllm.py`
+- `python listwise_distillation/query_gen_scripts/question_gen_vllm.py`
+- `python listwise_distillation/query_gen_scripts/random_query_gen_vllm.py`
+- `python listwise_distillation/query_gen_scripts/title_gen_vllm.py`
