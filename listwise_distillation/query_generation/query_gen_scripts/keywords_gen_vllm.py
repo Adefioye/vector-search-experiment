@@ -9,7 +9,7 @@ from vllm import LLM, SamplingParams
 model_id = "meta-llama/Meta-Llama-3.1-8B-Instruct"
 llm = LLM(model=model_id)
 
-beir_datasets = ['msmarco', 'fiqa', 'scifact', 'trec-covid', 'nfcorpus', 'arguana', 'webis-touche2020', 'dbpedia-entity', 'scidocs', 'climate-fever']
+beir_datasets = ['msmarco', 'fiqa', 'scifact', 'trec-covid', 'nfcorpus', 'arguana', 'webis-touche2020', 'scidocs', 'climate-fever']
 for dataset in beir_datasets:
 
     gpt_examples = []
