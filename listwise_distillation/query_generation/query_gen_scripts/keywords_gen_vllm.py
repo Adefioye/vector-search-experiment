@@ -83,7 +83,7 @@ for dataset in beir_datasets:
 
 
     index = 0
-    with open('../generated_queries/' + dataset + '_generated_queries_keywords.tsv', 'w') as f:
+    with open('generated_queries/' + dataset + '_generated_queries_keywords.tsv', 'w') as f:
         sampling_params = SamplingParams(skip_special_tokens=True, max_tokens=50, min_tokens=1, temperature=0.8)
         outputs = llm.generate(
             llm_inputs,

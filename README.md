@@ -82,12 +82,17 @@ if (pid not in disregard_ids):
 - `python listwise_distillation/query_gen_scripts/title_gen_vllm.py`
 
 ### How to get data to train on using synthetic queries (My understanding)
-1. Generate `top 20` hits using `bge_retrieve.sh`.
+1. Generate `top 20` hits using `model_retrieve_20.sh`.
 2. Ideally use crossencoder `reranker` RankT5 to re-score the scores in `stage 1` and create a `jsonl` structure using `tweaked version` of `generate_jsonl_for_reranking.py`.
 2. Filter out the queries whose positive passage is in top 20 rank using `filter_by_reranker.py`
 4. The cross-encoder score is normalized using `normalized_scores.py`
 4. The normalized outputs is then passed to `create_train_dev_data.py` (Need tweaking)
 5. Use the jsonl file to perform both `infonce and listwise distillation training`
+
+- __OUTPUTS__
+1. 
+input: `generated_queries/${dataset}_generated_queries_${query_type}.tsv`
+output: `retrieval_runs/run.${model_name}.${dataset}.generated-queries-${query_type}_20.txt`
 
 >NOTE:
 - Dig into `filter_by_reranker.py`: it appears to take `jsonl` with `rankt5` scores and ensures only queries with top 20 passages whose `positive passage` has `rank 1` are retained
