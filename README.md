@@ -73,10 +73,42 @@ if (pid not in disregard_ids):
 2. For `infonce + listwise loss`, use `train_nomic_embed_joint_loss.py`.
 
 # TODO
-To generate synthetic queries
+### To generate synthetic queries
 - `python listwise_distillation/query_gen_scripts/claims_gen_vllm.py`
 - `python listwise_distillation/query_gen_scripts/keywords_gen_vllm.py`
 - `python listwise_distillation/query_gen_scripts/msmarco_query_gen_vllm.py`
 - `python listwise_distillation/query_gen_scripts/question_gen_vllm.py`
 - `python listwise_distillation/query_gen_scripts/random_query_gen_vllm.py`
 - `python listwise_distillation/query_gen_scripts/title_gen_vllm.py`
+
+### How to get data to train on using synthetic queries (My understanding)
+1. Generate `top 20` hits using `bge_retrieve.sh`.
+2. Ideally use crossencoder `reranker` RankT5 to re-score the scores in `stage 1` and create a `jsonl` structure using `tweaked version` of `generate_jsonl_for_reranking.py`.
+2. Filter out the queries whose positive passage is in top 20 rank using `filter_by_reranker.py`
+4. The cross-encoder score is normalized using `normalized_scores.py`
+4. The normalized outputs is then passed to `create_train_dev_data.py` (Need tweaking)
+5. Use the jsonl file to perform both `infonce and listwise distillation training`
+
+>NOTE:
+- Dig into `filter_by_reranker.py`: it appears to take `jsonl` with `rankt5` scores and ensures only queries with top 20 passages whose `positive passage` has `rank 1` are retained
+- Dig into `normalized_scores.py`: This takes output `jsonl` from above and normalize the `rankt5` scores.
+- To evaluate in-domain effectiveness, we finetune on the MSMARCO passage dataset. For this task, we sample 200K passages (rather than 100K as used elsewhere) to better take advantage of its scale and generality.
+
+### How to generate Table 4?
+>NOTE:
+Table 4: Retrieval effectiveness when training the E5-unsupervised model with the different query types considered and all generated queries. Best scores overall are bolded and we underline the best scores when training with a single query type.
+
+1. Use `combined loss` if proven to help recover retrieval effectiveness of model.
+2. Use each `query type` separately finetune `nomic-embed-supervised vs unsupervised` model
+3. Get NDCG@10 for the `finetuned` model
+
+### How to generate Table 5?
+>NOTE:
+Table 5: Retrieval effectiveness for the E5-unsupervised model fine-tuned with human-written and synthetic queries. For the synthetic queries, results are provided for both a subset of 56K queries to provide a fair comparison and the full query set.
+
+1. We have 5 different queries here
+  - User queries (Human) `56K`
+  - User queries, Few-shot (Synthetic) `56K`
+  - User queries, Few-shot (Synthetic) `96K`
+  - User queries, Zero-shot (Synthetic) `56K`
+  - User queries, Zero-shot (Synthetic) `96K`

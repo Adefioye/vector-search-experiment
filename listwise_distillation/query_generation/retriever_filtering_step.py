@@ -21,7 +21,7 @@ for retriever in retrievers:
             current_query = -1
             rank = 1
             step_one_filtered_lines = []
-            with open(f'{PARENT_DIR}/retrieval_runs/run.{retriever}.{beir_dataset}.generated-queries-{query_type}_100.txt', 'r') as f:
+            with open(f'{PARENT_DIR}/retrieval_runs/run.{retriever}.{beir_dataset}.generated-queries-{query_type}.txt', 'r') as f:
                 for line in tqdm(f):
                     vals = line.split(' ')
                     qid = str(vals[0])
