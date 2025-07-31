@@ -87,10 +87,10 @@ if (pid not in disregard_ids):
 3. Ideally use crossencoder `reranker` RankT5 to re-score the scores in `stage 2` and create a `jsonl`.
   - Run trec to jsonl `per retriever per dataset per query_type` using `generate_jsonl_for_reranking`.
 4. Run reranking `per retriever per dataset per query_type` using `run_reranking_for_generated_queries.sh`
-4. Filter out the queries whose positive passage is in top 20 rank using `filter_by_reranker.py`
-4. The cross-encoder score is normalized using `normalized_scores.py`
-4. The normalized outputs is then passed to `create_train_dev_data.py` (Need tweaking)
-5. Use the jsonl file to perform both `infonce and listwise distillation training`
+5. Filter out the queries whose positive passage is in top 20 rank using `filter_by_reranker.py`
+6. The cross-encoder score is normalized using `normalized_scores.py`
+7. The normalized outputs is then passed to `create_train_dev_data.py` (Need tweaking)
+8. Use the jsonl file to perform both `infonce and listwise distillation training`
 
 - __INPUTS & OUTPUTS & How to achieve the steps above?__
 1. 
@@ -106,10 +106,10 @@ output: `retrieval_runs/run.{retriever}.{beir_dataset}.generated-queries-{query_
 4. Rerank each `per retriever per dataset per query_type` results using `run_reranking_for_generated_queries.sh`.
   input: `jsonl_before_reranking/{retriever}_{beir_dataset}-queries-{query_type}.jsonl`
   output: `jsonl_after_reranking/{retriever}_{beir_dataset}-queries-{query_type}.jsonl`
-  - After this we can then launch `filter_by_reranker.py`
+5. After this, we can then launch `filter_by_reranker.py`
   input: `jsonl_after_reranking/{retriever}_{beir_dataset}-queries-{query_type}.jsonl`
   output: `outputs/{retriever}_{beir_dataset}-queries-{query_type}.jsonl`
-  - Normalize output from reranker. Use `score` instead of `rankt5_score` in `json passages`.
+6. Normalize output from reranker using `normalized_scores.py`. Use `score` instead of `rankt5_score` in `json passages`.
   input: `outputs/{retriever}_{beir_dataset}-queries-{query_type}.jsonl`
   output: `final_outputs/{retriever}_{beir_dataset}-queries-{query_type}-normalized.jsonl`
   - Create train and dev split 

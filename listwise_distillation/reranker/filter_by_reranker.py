@@ -34,10 +34,11 @@ def filter_samples(file_path):
             if len(jsonl_line['passages']) >= 20 and jsonl_line['qid'] == jsonl_line['passages'][0]['docid']:
                 filtered_samples.append(jsonl_line)
 
-    print(f"Total samples processed: {total_count}")
-    print(f"Total filtered samples: {len(filtered_samples)}")
+    print(f'{file_path}\n')
+    print(f"Total samples processed: {total_count}\n")
+    print(f"Total filtered samples: {len(filtered_samples)}\n")
     ratio = (len(filtered_samples) / total_count) if total_count else 0
-    print(f"Ratio of filtered samples to total count: {ratio:.2%}")
+    print(f"Ratio of filtered samples to total count: {ratio:.2%}\n")
 
     return filtered_samples
 
@@ -54,11 +55,11 @@ for retriever in retrievers:
             filtered_count = 0
 
             # Filter samples first
-            file_path = f'outputs/{retriever}_rankt5-{beir_dataset}-queries-{query_type}.jsonl'
+            file_path = f'jsonl_after_reranking/{retriever}_{beir_dataset}-queries-{query_type}.jsonl'
             filtered_samples = filter_samples(file_path)
 
             # Process filtered samples
-            output_file_path = f'outputs/{retriever}_{beir_dataset}-queries-{query_type}.1.jsonl'
+            output_file_path = f'outputs/{retriever}_{beir_dataset}-queries-{query_type}.jsonl'
             with open(output_file_path, 'w', encoding='utf-8') as output_f:
                 for jsonl_line in tqdm(filtered_samples, desc=f'Processing {file_path}'):
                     output_f.write(json.dumps(jsonl_line, ensure_ascii=False) + "\n")
