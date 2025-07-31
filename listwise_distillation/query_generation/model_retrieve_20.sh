@@ -1,16 +1,20 @@
 dataset='msmarco'
 
 model=nomic-ai/nomic-embed-text-v1
-model_name=nomic-sup
+model_name=nomic-embed-text-v1
+model_prefix=nomic-ai
 
 # model=nomic-ai/nomic-embed-text-v1-unsupervised
-# model_name=nomic-unsup
+# model_name=nomic-embed-text-v1-unsupervised
+# model_prefix=nomic-ai
 
 # model=nomic-ai/modernbert-embed-base
-# model_name=modernbert-sup
+# model_name=modernbert-embed-base
+# model_prefix=nomic-ai
 
 # model=nomic-ai/modernbert-embed-base-unsupervised
-# model_name=modernbert-unsup
+# model_name=modernbert-embed-base-unsupervised
+# model_prefix=nomic-ai
 
 python listwise_distillation/encoding/encode_corpus.py --model_name ${model} --normalize --pooling mean --batch_size 1800 --dataset ${dataset}
 
@@ -18,7 +22,7 @@ for query_type in 'keywords' 'titles' 'claims' 'questions' 'random' 'msmarco'; d
     python -m pyserini.search.faiss \
       --threads 16 --batch-size 8192 \
       --encoder-class auto --encoder ${model} --l2-norm --query-prefix "search_query: " \
-      --index indices/${model_name}_${dataset}_index \
+      --index indices/${model_prefix}_${model_name}_${dataset}_index \
       --topics generated_queries/${dataset}_generated_queries_${query_type}.tsv \
       --output retrieval_runs/run.${model_name}.${dataset}.generated-queries-${query_type}_20.txt \
       --hits 20 \
@@ -36,7 +40,7 @@ for dataset in 'fiqa' 'scifact' 'trec-covid' 'nfcorpus' 'arguana' 'webis-touche2
     python -m pyserini.search.faiss \
       --threads 16 --batch-size 8192 \
       --encoder-class auto --encoder ${model} --l2-norm --query-prefix "search_query: " \
-      --index indices/${model_name}_${dataset}_index \
+      --index indices/${model_prefix}_${model_name}_${dataset}_index \
       --topics generated_queries/${dataset}_generated_queries_${query_type}.tsv \
       --output retrieval_runs/run.${model_name}.${dataset}.generated-queries-${query_type}_20.txt \
       --hits 20 \
