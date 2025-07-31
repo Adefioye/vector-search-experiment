@@ -152,7 +152,7 @@ def load_dataset(file_path, list_length):
             for passage in passages:
                 passage_lists_texts.append("search_document: " + passage['text'])
                 passage_lists_ids.append(passage['docid'])
-                passage_lists_scores.append(passage['rankt5_score'])
+                passage_lists_scores.append(passage['score'])
 
     passage_lists_texts = np.array(passage_lists_texts).reshape(len(queries), list_length)
     passage_lists_ids = np.array(passage_lists_ids).reshape(len(queries), list_length)

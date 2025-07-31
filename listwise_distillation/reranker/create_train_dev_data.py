@@ -88,8 +88,8 @@ def main():
             ]
             
             # Define output filenames
-            train_output_file = f'beir.{retriever}.{beir_dataset}.train.generated_queries.listwise.jsonl'
-            dev_output_file = f'beir.{retriever}.{beir_dataset}.dev.generated_queries.listwise.jsonl'
+            train_output_file = f'final_data/beir.{retriever}.{beir_dataset}.train.generated_queries.listwise.jsonl'
+            dev_output_file = f'final_data/beir.{retriever}.{beir_dataset}.dev.generated_queries.listwise.jsonl'
 
             # Step 1: Load samples
             samples = load_samples(input_files)

@@ -38,9 +38,10 @@ class Config:
         self.model_name_or_path = 'nomic-ai/nomic-embed-text-v1'
         self.save_model = True
         self.threshold_score = 0.6
+        self.retriever = 'nomic-embed-text-v1'
         self.save_model_name = f"{self.dataset}_nomic-embed-text-v1"
-        self.train_file_path = f'../RankT5/beir.bge.{self.dataset}.train.generated_queries.listwise.jsonl'
-        self.dev_file_path = f'../RankT5/beir.bge.{self.dataset}.dev.generated_queries.listwise.jsonl'
+        self.train_file_path = f'final_data/beir.{self.retriever}.{self.dataset}.train.generated_queries.listwise.jsonl'
+        self.dev_file_path = f'final_data/beir.{self.retriever}.{self.dataset}.dev.generated_queries.listwise.jsonl'
         
 class EmbeddingModel(nn.Module):
     def __init__(self, model_name_or_path, dropout=0.0):
@@ -151,7 +152,7 @@ def load_dataset(file_path, list_length):
             for passage in passages:
                 passage_lists_texts.append("search_document: " + passage['text'])
                 passage_lists_ids.append(passage['docid'])
-                passage_lists_scores.append(passage['rankt5_score'])
+                passage_lists_scores.append(passage['score'])
 
     passage_lists_texts = np.array(passage_lists_texts).reshape(len(queries), list_length)
     passage_lists_ids = np.array(passage_lists_ids).reshape(len(queries), list_length)
