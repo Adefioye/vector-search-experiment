@@ -83,16 +83,38 @@ if (pid not in disregard_ids):
 
 ### How to get data to train on using synthetic queries (My understanding)
 1. Generate `top 20` hits using `model_retrieve_20.sh`.
-2. Ideally use crossencoder `reranker` RankT5 to re-score the scores in `stage 1` and create a `jsonl` structure using `tweaked version` of `generate_jsonl_for_reranking.py`.
-2. Filter out the queries whose positive passage is in top 20 rank using `filter_by_reranker.py`
+2. Filter out the queries whose positive passage is not in `top 20` rank using `retriever_filtering_step.py`.
+3. Ideally use crossencoder `reranker` RankT5 to re-score the scores in `stage 2` and create a `jsonl`.
+4. Filter out the queries whose positive passage is in top 20 rank using `filter_by_reranker.py`
 4. The cross-encoder score is normalized using `normalized_scores.py`
 4. The normalized outputs is then passed to `create_train_dev_data.py` (Need tweaking)
 5. Use the jsonl file to perform both `infonce and listwise distillation training`
 
-- __OUTPUTS__
+- __INPUTS & OUTPUTS & How to achieve the steps above?__
 1. 
 input: `generated_queries/${dataset}_generated_queries_${query_type}.tsv`
 output: `retrieval_runs/run.${model_name}.${dataset}.generated-queries-${query_type}_20.txt`
+2. 
+input: `retrieval_runs/run.${model_name}.${dataset}.generated-queries-${query_type}_20.txt`
+output: `retrieval_runs/run.{retriever}.{beir_dataset}.generated-queries-{query_type}.filtered.txt`
+3. To get to achieve 3, we need to do the following:
+  - Usually, the output coming from `step 2` is in TREC format. Convert to `jsonl`.
+  - Generate beir datasets for queries and corpus in json/jsonl in `beir_datasets` using `run_generate_beir_json.sh`.
+  - These datasets are used to create `jsonl` using `run_trec_to_jsonl`. These would be run for each filtered run `per retriever per dataset per query_type`.
+  - Rerank each `per retriever per dataset per query_type` results using `run_reranking.sh`.
+  - After this we can then launch `filter_by_reranker.py`
+  input: `outputs/{retriever}_rankt5-{beir_dataset}-queries-{query_type}.jsonl`
+  output: `outputs/{retriever}_{beir_dataset}-queries-{query_type}.1.jsonl`
+  - Normalize output from reranker. Use `rankt5_score` instead of `score` in `json passages`.
+  input: `outputs/{retriever}_{beir_dataset}-queries-{query_type}.1.jsonl`
+  output: `outputs/{retriever}_{beir_dataset}-queries-{query_type}-normalized.jsonl`
+  - Create train and dev split 
+  input: for all query types 
+        `outputs/{retriever}_{beir_dataset}-queries-questions-normalized.jsonl`
+        `outputs/{retriever}_{beir_dataset}-queries-random-normalized.jsonl`
+  output: 
+      `beir.{retriever}.{beir_dataset}.train.generated_queries.listwise.jsonl`
+      `beir.{retriever}.{beir_dataset}.dev.generated_queries.listwise.jsonl`
 
 >NOTE:
 - Dig into `filter_by_reranker.py`: it appears to take `jsonl` with `rankt5` scores and ensures only queries with top 20 passages whose `positive passage` has `rank 1` are retained
