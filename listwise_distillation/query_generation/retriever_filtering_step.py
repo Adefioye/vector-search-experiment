@@ -5,7 +5,7 @@ beir_datasets = ['msmarco', 'fiqa', 'scifact', 'trec-covid', 'nfcorpus', 'arguan
 query_types = ['keywords', 'titles', 'claims', 'questions', 'random', 'msmarco']
 retrievers = ['nomic-embed-text-v1', 'nomic-embed-text-v1-unsupervised', 'modernbert-embed-base', 'modernbert-embed-base-unsupervised']
 
-# run.${model_name}.${dataset}.generated-queries-${query_type}_100.txt 
+# run.${model_name}.${dataset}.generated-queries-${query_type}_20.txt 
 for retriever in retrievers:
     for beir_dataset in beir_datasets:
         for query_type in query_types:
