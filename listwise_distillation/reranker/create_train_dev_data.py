@@ -71,19 +71,20 @@ def split_train_dev(samples, train_file, dev_file, train_ratio=0.9, seed=42):
     print(f"Training and development files have been created:\n- {train_file}\n- {dev_file}")
 
 def main():
-    beir_datasets = ['msmarco', 'fiqa', 'scifact', 'trec-covid', 'nfcorpus', 'arguana', 'webis-touche2020', 'dbpedia-entity', 'scidocs', 'climate-fever']
-    retrievers = {"bge": "BAAI_bge-base-en-v1.5", "gte": "Alibaba-NLP_gte-base-en-v1.5", "snowflake": "Snowflake_snowflake-arctic-embed-m-v1.5"}
+    beir_datasets = ['msmarco', 'fiqa', 'scifact', 'trec-covid', 'nfcorpus', 'arguana', 'webis-touche2020', 'scidocs', 'climate-fever']
+    retrievers = ['nomic-embed-text-v1', 'nomic-embed-text-v1-unsupervised', 'modernbert-embed-base', 'modernbert-embed-base-unsupervised']
 
     for beir_dataset in beir_datasets:  
-        for retriever in retrievers.keys():      
+        for retriever in retrievers:      
             # Define input filenames
+            # final_outputs/{retriever}_{beir_dataset}-queries-{query_type}-normalized.jsonl
             input_files = [
-                f'outputs/{retriever}_{beir_dataset}-queries-questions-normalized.jsonl',
-                f'outputs/{retriever}_{beir_dataset}-queries-claims-normalized.jsonl',
-                f'outputs/{retriever}_{beir_dataset}-queries-titles-normalized.jsonl',
-                f'outputs/{retriever}_{beir_dataset}-queries-msmarco-normalized.jsonl',
-                f'outputs/{retriever}_{beir_dataset}-queries-random-normalized.jsonl',
-                f'outputs/{retriever}_{beir_dataset}-queries-keywords-normalized.jsonl'
+                f'final_outputs/{retriever}_{beir_dataset}-queries-questions-normalized.jsonl',
+                f'final_outputs/{retriever}_{beir_dataset}-queries-claims-normalized.jsonl',
+                f'final_outputs/{retriever}_{beir_dataset}-queries-titles-normalized.jsonl',
+                f'final_outputs/{retriever}_{beir_dataset}-queries-msmarco-normalized.jsonl',
+                f'final_outputs/{retriever}_{beir_dataset}-queries-random-normalized.jsonl',
+                f'final_outputs/{retriever}_{beir_dataset}-queries-keywords-normalized.jsonl'
             ]
             
             # Define output filenames
