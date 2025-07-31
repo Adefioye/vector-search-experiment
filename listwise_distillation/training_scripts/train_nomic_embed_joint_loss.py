@@ -39,9 +39,10 @@ class Config:
         self.model_name_or_path = 'nomic-ai/nomic-embed-text-v1'
         self.save_model = True
         self.threshold_score = 0.6
+        self.retriever = 'nomic-embed-text-v1'
         self.save_model_name = f"{self.dataset}_nomic-embed-text-v1"
-        self.train_file_path = f'../RankT5/beir.bge.{self.dataset}.train.generated_queries.listwise.jsonl'
-        self.dev_file_path = f'../RankT5/beir.bge.{self.dataset}.dev.generated_queries.listwise.jsonl'
+        self.train_file_path = f'final_data/beir.{self.retriever}.{self.dataset}.train.generated_queries.listwise.jsonl'
+        self.dev_file_path = f'final_data/beir.{self.retriever}.{self.dataset}.dev.generated_queries.listwise.jsonl'
         
 class EmbeddingModel(nn.Module):
     def __init__(self, model_name_or_path, dropout=0.0):
