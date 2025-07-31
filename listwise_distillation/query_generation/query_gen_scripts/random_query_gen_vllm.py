@@ -8,6 +8,7 @@ from vllm import LLM, SamplingParams
 
 model_id = "meta-llama/Meta-Llama-3.1-8B-Instruct"
 llm = LLM(model=model_id)
+PARENT_DIR = 'listwise_distillation/query_generation'
 
 beir_datasets = ['msmarco', 'fiqa', 'scifact', 'trec-covid', 'nfcorpus', 'arguana', 'webis-touche2020', 'scidocs', 'climate-fever']
 for dataset in beir_datasets:
@@ -20,10 +21,10 @@ for dataset in beir_datasets:
     '''
 
     keep_ids = set()
-    with open('../chosen_ids/' + dataset + '_chosen_ids.txt', 'r', encoding='utf-8') as f:
+    with open(f'{PARENT_DIR}/chosen_ids/' + dataset + '_chosen_ids.txt', 'r', encoding='utf-8') as f:
         for line in f:
             keep_ids.add(line.strip())
-    with open('../test_ids/' + dataset + '_test_ids.txt', 'r', encoding='utf-8') as f:
+    with open(f'{PARENT_DIR}/test_ids/' + dataset + '_test_ids.txt', 'r', encoding='utf-8') as f:
         for line in f:
             keep_ids.add(line.strip())
 
