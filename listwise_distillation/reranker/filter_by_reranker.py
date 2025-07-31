@@ -41,13 +41,13 @@ def filter_samples(file_path):
 
     return filtered_samples
 
-beir_datasets = ['msmarco', 'fiqa', 'scifact', 'trec-covid', 'nfcorpus', 'arguana', 'webis-touche2020', 'dbpedia-entity', 'scidocs', 'climate-fever']
+beir_datasets = ['msmarco', 'fiqa', 'scifact', 'trec-covid', 'nfcorpus', 'arguana', 'webis-touche2020', 'scidocs', 'climate-fever']
 
 query_types = ['titles', 'claims', 'questions', 'random', 'msmarco', 'keywords']
 
-retrievers = {"bge": "BAAI_bge-base-en-v1.5", "gte": "Alibaba-NLP_gte-base-en-v1.5", "snowflake": "Snowflake_snowflake-arctic-embed-m-v1.5",}
+retrievers = ['nomic-embed-text-v1', 'nomic-embed-text-v1-unsupervised', 'modernbert-embed-base', 'modernbert-embed-base-unsupervised']
 
-for retriever in retrievers.keys():
+for retriever in retrievers:
     for beir_dataset in beir_datasets:
         for query_type in query_types:
             positives_counts = []

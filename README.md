@@ -85,8 +85,8 @@ if (pid not in disregard_ids):
 1. Generate `top 20` hits using `model_retrieve_20.sh`.
 2. Filter out the queries whose positive passage is not in `top 20` rank using `retriever_filtering_step.py`.
 3. Ideally use crossencoder `reranker` RankT5 to re-score the scores in `stage 2` and create a `jsonl`.
-  - Run `run_generate_beir_json.sh` for all datasets to produce `queries and documents` in `json/jsonl`.
-  - Run trec to jsonl for `retriever per dataset per query_type`
+  - Run trec to jsonl `per retriever per dataset per query_type` using `generate_jsonl_for_reranking`.
+4. Run reranking `per retriever per dataset per query_type` using `run_reranking_for_generated_queries.sh`
 4. Filter out the queries whose positive passage is in top 20 rank using `filter_by_reranker.py`
 4. The cross-encoder score is normalized using `normalized_scores.py`
 4. The normalized outputs is then passed to `create_train_dev_data.py` (Need tweaking)
@@ -103,7 +103,7 @@ output: `retrieval_runs/run.{retriever}.{beir_dataset}.generated-queries-{query_
   - Usually, the output coming from `step 2` is in TREC format. Convert to `jsonl`.
   input: `retrieval_runs/run.{retriever}.{beir_dataset}.generated-queries-{query_type}.filtered.txt`
   output: `jsonl_before_reranking/{retriever}_{beir_dataset}-queries-{query_type}.jsonl`
-  - Rerank each `per retriever per dataset per query_type` results using `run_reranking.sh`.
+4. Rerank each `per retriever per dataset per query_type` results using `run_reranking_for_generated_queries.sh`.
   input: `jsonl_before_reranking/{retriever}_{beir_dataset}-queries-{query_type}.jsonl`
   output: `jsonl_after_reranking/{retriever}_{beir_dataset}-queries-{query_type}.jsonl`
   - After this we can then launch `filter_by_reranker.py`

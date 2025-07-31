@@ -4,16 +4,17 @@ filter_k = 20
 beir_datasets = ['msmarco', 'fiqa', 'scifact', 'trec-covid', 'nfcorpus', 'arguana', 'webis-touche2020', 'scidocs', 'climate-fever']
 query_types = ['keywords', 'titles', 'claims', 'questions', 'random', 'msmarco']
 retrievers = ['nomic-embed-text-v1', 'nomic-embed-text-v1-unsupervised', 'modernbert-embed-base', 'modernbert-embed-base-unsupervised']
+PARENT_DIR = 'listwise_distillation/query_generation'
 
 # run.${model_name}.${dataset}.generated-queries-${query_type}_20.txt 
 for retriever in retrievers:
     for beir_dataset in beir_datasets:
         for query_type in query_types:
             disregard_ids = set()
-            with open('duplicate_ids/' + beir_dataset + '_duplicate_ids.txt', 'r', encoding='utf-8') as f:
+            with open(f'{PARENT_DIR}/duplicate_ids/' + beir_dataset + '_duplicate_ids.txt', 'r', encoding='utf-8') as f:
                 for line in f:
                     disregard_ids.add(line.strip())
-            with open('test_ids/' + beir_dataset + '_test_ids.txt', 'r', encoding='utf-8') as f:
+            with open(f'{PARENT_DIR}/test_ids/' + beir_dataset + '_test_ids.txt', 'r', encoding='utf-8') as f:
                 for line in f:
                     disregard_ids.add(line.strip())
 
