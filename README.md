@@ -74,12 +74,12 @@ if (pid not in disregard_ids):
 
 # TODO
 ### To generate synthetic queries
-- `python listwise_distillation/query_gen_scripts/claims_gen_vllm.py`
-- `python listwise_distillation/query_gen_scripts/keywords_gen_vllm.py`
-- `python listwise_distillation/query_gen_scripts/msmarco_query_gen_vllm.py`
-- `python listwise_distillation/query_gen_scripts/question_gen_vllm.py`
-- `python listwise_distillation/query_gen_scripts/random_query_gen_vllm.py`
-- `python listwise_distillation/query_gen_scripts/title_gen_vllm.py`
+- `python listwise_distillation/query_generation/query_gen_scripts/claims_gen_vllm.py`
+- `python listwise_distillation/query_generation/query_gen_scripts/keywords_gen_vllm.py`
+- `python listwise_distillation/query_generation/query_gen_scripts/msmarco_query_gen_vllm.py`
+- `python listwise_distillation/query_generation/query_gen_scripts/question_gen_vllm.py`
+- `python listwise_distillation/query_generation/query_gen_scripts/random_query_gen_vllm.py`
+- `python listwise_distillation/query_generation/query_gen_scripts/title_gen_vllm.py`
 
 ### How to get data to train on using synthetic queries (My understanding)
 1. Generate `top 20` hits using `model_retrieve_20.sh`.
@@ -94,31 +94,30 @@ if (pid not in disregard_ids):
 
 - __INPUTS & OUTPUTS & How to achieve the steps above?__
 1. 
-input: `generated_queries/${dataset}_generated_queries_${query_type}.tsv` (qid, text)
-output: `retrieval_runs/run.${model_name}.${dataset}.generated-queries-${query_type}_20.txt`
+  - input: `generated_queries/${dataset}_generated_queries_${query_type}.tsv` (qid, text).
+  - output: `retrieval_runs/run.${model_name}.${dataset}.generated-queries-${query_type}_20.txt`.
 2. 
-input: `retrieval_runs/run.${model_name}.${dataset}.generated-queries-${query_type}_20.txt` (TREC format)
-output: `retrieval_runs/run.{retriever}.{beir_dataset}.generated-queries-{query_type}.filtered.txt` (TREC format)
+  - input: `retrieval_runs/run.${model_name}.${dataset}.generated-queries-${query_type}_20.txt` (TREC format)
+  - output: `retrieval_runs/run.{retriever}.{beir_dataset}.generated-queries-{query_type}.filtered.txt` (TREC format)
 3. To get to achieve 3, we need to do the following:
   - Usually, the output coming from `step 2` is in TREC format. Convert to `jsonl`.
-  input: `retrieval_runs/run.{retriever}.{beir_dataset}.generated-queries-{query_type}.filtered.txt`
-  output: `jsonl_before_reranking/{retriever}_{beir_dataset}-queries-{query_type}.jsonl`
+  - input: `retrieval_runs/run.{retriever}.{beir_dataset}.generated-queries-{query_type}.filtered.txt`
+  - output: `jsonl_before_reranking/{retriever}_{beir_dataset}-queries-{query_type}.jsonl`
 4. Rerank each `per retriever per dataset per query_type` results using `run_reranking_for_generated_queries.sh`.
-  input: `jsonl_before_reranking/{retriever}_{beir_dataset}-queries-{query_type}.jsonl`
-  output: `jsonl_after_reranking/{retriever}_{beir_dataset}-queries-{query_type}.jsonl`
+  - input: `jsonl_before_reranking/{retriever}_{beir_dataset}-queries-{query_type}.jsonl`
+  - output: `jsonl_after_reranking/{retriever}_{beir_dataset}-queries-{query_type}.jsonl`
 5. After this, we can then launch `filter_by_reranker.py`
-  input: `jsonl_after_reranking/{retriever}_{beir_dataset}-queries-{query_type}.jsonl`
-  output: `outputs/{retriever}_{beir_dataset}-queries-{query_type}.jsonl`
+  - input: `jsonl_after_reranking/{retriever}_{beir_dataset}-queries-{query_type}.jsonl`
+  - output: `outputs/{retriever}_{beir_dataset}-queries-{query_type}.jsonl`
 6. Normalize output from reranker using `normalized_scores.py`. Use `score` instead of `rankt5_score` in `json passages`.
-  input: `outputs/{retriever}_{beir_dataset}-queries-{query_type}.jsonl`
-  output: `final_outputs/{retriever}_{beir_dataset}-queries-{query_type}-normalized.jsonl`
-  - Create train and dev split 
-  input: for all query types 
-        `outputs/{retriever}_{beir_dataset}-queries-questions-normalized.jsonl`
-        `outputs/{retriever}_{beir_dataset}-queries-random-normalized.jsonl`
+  - input: `outputs/{retriever}_{beir_dataset}-queries-{query_type}.jsonl`
+  - output: `final_outputs/{retriever}_{beir_dataset}-queries-{query_type}-normalized.jsonl`
+7. Create train and dev split 
+  - input: for all query types 
+        `final_outputs/{retriever}_{beir_dataset}-queries-{query_type}-normalized.jsonl`
   output: 
-      `beir.{retriever}.{beir_dataset}.train.generated_queries.listwise.jsonl`
-      `beir.{retriever}.{beir_dataset}.dev.generated_queries.listwise.jsonl`
+      `final_data/beir.{self.retriever}.{self.dataset}.train.generated_queries.listwise.jsonl`
+      `final_data/beir.{self.retriever}.{self.dataset}.dev.generated_queries.listwise.jsonl`
 
 >NOTE:
 - Dig into `filter_by_reranker.py`: it appears to take `jsonl` with `rankt5` scores and ensures only queries with top 20 passages whose `positive passage` has `rank 1` are retained

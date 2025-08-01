@@ -32,6 +32,10 @@ conda run -n pyserini pip install torch
 # Make sure faiss-gpu is REMOVED from requirements.txt before this step
 conda run -n pyserini pip install -r requirements.txt
 
+# Install vllm for query generation
+echo "Installing vllm..."
+conda run -n pyserini pip install vllm --extra-index-url https://download.pytorch.org/whl/cu128
+
 echo "✅ Environment setup complete."
 echo "👉 Activate it with: conda activate pyserini"
 
