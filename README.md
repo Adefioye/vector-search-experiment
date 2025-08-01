@@ -74,14 +74,12 @@ if (pid not in disregard_ids):
 
 # TODO
 ### To generate synthetic queries
-- `python listwise_distillation/query_generation/query_gen_scripts/claims_gen_vllm.py`
-- `python listwise_distillation/query_generation/query_gen_scripts/keywords_gen_vllm.py`
-- `python listwise_distillation/query_generation/query_gen_scripts/msmarco_query_gen_vllm.py`
-- `python listwise_distillation/query_generation/query_gen_scripts/question_gen_vllm.py`
-- `python listwise_distillation/query_generation/query_gen_scripts/random_query_gen_vllm.py`
-- `python listwise_distillation/query_generation/query_gen_scripts/title_gen_vllm.py`
+```
+chmod +x listwise_distillation/query_generation/query_gen_scripts/run_all_query_generation.sh
+./listwise_distillation/query_generation/query_gen_scripts/run_all_query_generation.sh
+```
 
-### How to get data to train on using synthetic queries (My understanding)
+### How to preprocess data for finetuning using synthetic queries (My understanding)
 1. Generate `top 20` hits using `model_retrieve_20.sh`.
 2. Filter out the queries whose positive passage is not in `top 20` rank using `retriever_filtering_step.py`.
 3. Ideally use crossencoder `reranker` RankT5 to re-score the scores in `stage 2` and create a `jsonl`.
@@ -142,3 +140,8 @@ Table 5: Retrieval effectiveness for the E5-unsupervised model fine-tuned with h
   - User queries, Few-shot (Synthetic) `96K`
   - User queries, Zero-shot (Synthetic) `56K`
   - User queries, Zero-shot (Synthetic) `96K`
+
+
+  # GIANT TODO:
+  - I need to use msmarco index for each model to get evals for `DL19 and DL20`.
+  - Repeat same for `finetuned models`.

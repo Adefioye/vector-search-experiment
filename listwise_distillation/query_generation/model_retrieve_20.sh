@@ -27,6 +27,9 @@ for query_type in 'keywords' 'titles' 'claims' 'questions' 'random' 'msmarco'; d
       --output retrieval_runs/run.${model_name}.${dataset}.generated-queries-${query_type}_20.txt \
       --hits 20 \
       --device cuda:0
+
+    # Print out information that the run was successful
+    echo "Run completed for ${model_name} on ${dataset} with query type ${query_type}."
 done
 
 
@@ -45,5 +48,11 @@ for dataset in 'fiqa' 'scifact' 'trec-covid' 'nfcorpus' 'arguana' 'webis-touche2
       --output retrieval_runs/run.${model_name}.${dataset}.generated-queries-${query_type}_20.txt \
       --hits 20 \
       --device cuda:0
+
+    # Print out information that the run was successful
+    echo "Run completed for ${model_name} on ${dataset} with query type ${query_type}."
   done
+
+  # Remove the index after each dataset run
+  rm -r indices/${model_prefix}_${model_name}_${dataset}_index
 done
