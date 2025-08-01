@@ -83,11 +83,11 @@ chmod +x listwise_distillation/query_generation/query_gen_scripts/run_all_query_
 1. Generate `top 20` hits using `model_retrieve_20.sh`.
 2. Filter out the queries whose positive passage is not in `top 20` rank using `retriever_filtering_step.py`.
 3. Ideally use crossencoder `reranker` RankT5 to re-score the scores in `stage 2` and create a `jsonl`.
-  - Run trec to jsonl `per retriever per dataset per query_type` using `generate_jsonl_for_reranking`.
+  - Run trec to jsonl `per retriever per dataset per query_type` using `generate_jsonl_for_reranking.py`.
 4. Run reranking `per retriever per dataset per query_type` using `run_reranking_for_generated_queries.sh`
 5. Filter out the queries whose positive passage is in top 20 rank using `filter_by_reranker.py`
-6. The cross-encoder score is normalized using `normalized_scores.py`
-7. The normalized outputs is then passed to `create_train_dev_data.py` (Need tweaking)
+6. The cross-encoder score is normalized using `normalize_scores.py`
+7. The normalized outputs is then passed to `create_train_dev_data.py`
 8. Use the jsonl file to perform both `infonce and listwise distillation training`
 
 - __INPUTS & OUTPUTS & How to achieve the steps above?__
