@@ -3,11 +3,12 @@ import numpy as np
 from tqdm import tqdm
 import os
 
-beir_datasets=['msmarco', 'fiqa', 'scifact', 'trec-covid', 'nfcorpus', 'arguana', 'webis-touche2020', 'scidocs', 'climate-fever']
+# beir_datasets=['msmarco', 'fiqa', 'scifact', 'trec-covid', 'nfcorpus', 'arguana', 'webis-touche2020', 'scidocs', 'climate-fever']
+beir_datasets = ['scifact', 'nfcorpus']
 
 query_types = ['titles', 'claims', 'questions', 'random', 'msmarco', 'keywords']
 
-retrievers = ['nomic-embed-text-v1', 'nomic-embed-text-v1-unsupervised', 'modernbert-embed-base', 'modernbert-embed-base-unsupervised']
+retrievers = ['nomic-embed-text-v1', 'modernbert-embed-base']
 
 for beir_dataset in beir_datasets:
     for query_type in query_types:

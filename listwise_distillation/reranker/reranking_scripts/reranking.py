@@ -289,7 +289,7 @@ def main():
     parser.add_argument('--input_path', required=True, help="Path to input JSONL.")
     parser.add_argument('--output_path', required=True, help="Path to output JSONL.")
     parser.add_argument('--batch_size', type=int, default=32, help="Batch size for scoring.")
-    parser.add_argument('--topk', type=int, default=100, help="Number of top passages to re-rank.")
+    parser.add_argument('--topk', type=int, default=20, help="Number of top passages to re-rank.")
     parser.add_argument('--max_input_length', type=int, default=512, help="Maximum input length for tokenization.")
     parser.add_argument('--device', type=str, default='cuda', help="Device to use (e.g., 'cuda', 'cpu').")
     args = parser.parse_args()
@@ -299,8 +299,10 @@ def main():
     text_key = "text"
     score_key = "score"
 
+    print(f"Loading data from {args.input_path}...")
     data = read_jsonl(args.input_path)
 
+    print("Loading reranker model...")
     reranker = RerankerModel(model_name=args.model_name, device=args.device)
 
     output_data = []

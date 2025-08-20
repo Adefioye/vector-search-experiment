@@ -142,6 +142,10 @@ Table 5: Retrieval effectiveness for the E5-unsupervised model fine-tuned with h
   - User queries, Zero-shot (Synthetic) `96K`
 
 
-  # GIANT TODO:
-  - I need to use msmarco index for each model to get evals for `DL19 and DL20`.
-  - Repeat same for `finetuned models`.
+# Training TODOs:
+- Train `modernbert-embed-base` and `nomic-embed-text-v1` on scifact and nfcorpus for INFONCE LOSS.
+- Evaluate trained model on their respective datasets and obtain NDCG@10 and RECALL@100.
+```
+chmod run_eval_without_reranker.sh
+./run_eval_without_reranker.sh
+```

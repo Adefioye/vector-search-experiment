@@ -3,15 +3,15 @@ set -euo pipefail
 
 echo "🚀 Starting all query generation scripts at $(date)"
 
-echo
-echo "1️⃣  Running claims_gen_vllm.py..."
-python listwise_distillation/query_generation/query_gen_scripts/claims_gen_vllm.py
-echo "✅ claims_gen_vllm.py finished at $(date)"
+# echo
+# echo "1️⃣  Running claims_gen_vllm.py..."
+# python listwise_distillation/query_generation/query_gen_scripts/claims_gen_vllm.py
+# echo "✅ claims_gen_vllm.py finished at $(date)"
 
-echo
-echo "2️⃣  Running keywords_gen_vllm.py..."
-python listwise_distillation/query_generation/query_gen_scripts/keywords_gen_vllm.py
-echo "✅ keywords_gen_vllm.py finished at $(date)"
+# echo
+# echo "2️⃣  Running keywords_gen_vllm.py..."
+# python listwise_distillation/query_generation/query_gen_scripts/keywords_gen_vllm.py
+# echo "✅ keywords_gen_vllm.py finished at $(date)"
 
 echo
 echo "3️⃣  Running msmarco_query_gen_vllm.py..."

@@ -9,10 +9,14 @@ from vllm import LLM, SamplingParams
 model_id = "meta-llama/Meta-Llama-3.1-8B-Instruct"
 llm = LLM(model=model_id)
 PARENT_DIR = 'listwise_distillation/query_generation'
+datasets_to_ignore= ['msmarco', 'fiqa', 'scifact', 'trec-covid']
 
 beir_datasets = ['msmarco', 'fiqa', 'scifact', 'trec-covid', 'nfcorpus', 'arguana', 'webis-touche2020', 'scidocs', 'climate-fever']
 
 for dataset in beir_datasets:
+
+    if dataset in datasets_to_ignore:
+        continue
 
     gpt_examples = []
     with open(f'{PARENT_DIR}/prompt_examples/gpt_examples_claims.json', 'r', encoding='utf-8') as input_pairs:
@@ -44,7 +48,7 @@ for dataset in beir_datasets:
         for line in f:
             keep_ids.add(line.strip())
 
-    ds = load_dataset("BeIR/" + dataset, "corpus")['corpus']; id_key='_id'
+    ds = load_dataset("BeIR/" + dataset, "corpus", trust_remote_code=True)['corpus']; id_key='_id'
         
     passages_dict = {}
 

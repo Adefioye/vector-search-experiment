@@ -1,11 +1,11 @@
-for dataset in 'nfcorpus' 'scifact' 'trec-covid' 'fiqa' 'scidocs' 'arguana' 'webis-touche2020' 'climate-fever'; do
+for dataset in 'scifact'; do
 
     # Change the querie back to 'search_query: ' for consistency
     # Also change --pooling to 'mean' for better performance on these datasets
     # DONE
-    # model=nomic-ai/nomic-embed-text-v1
-    # model_name=nomic-embed-text-v1
-    # model_prefix=nomic-ai
+    model=nomic-ai/nomic-embed-text-v1
+    model_name=nomic-embed-text-v1
+    model_prefix=nomic-ai
 
     # model=nomic-ai/nomic-embed-text-v1-unsupervised
     # model_name=nomic-embed-text-v1-unsupervised
@@ -15,9 +15,9 @@ for dataset in 'nfcorpus' 'scifact' 'trec-covid' 'fiqa' 'scidocs' 'arguana' 'web
     # model_name=modernbert-embed-base
     # model_prefix=nomic-ai
 
-    model=nomic-ai/modernbert-embed-base-unsupervised
-    model_name=modernbert-embed-base-unsupervised
-    model_prefix=nomic-ai
+    # model=nomic-ai/modernbert-embed-base-unsupervised
+    # model_name=modernbert-embed-base-unsupervised
+    # model_prefix=nomic-ai
 
     python listwise_distillation/encoding/encode_corpus.py --model_name ${model} --normalize --pooling mean --batch_size 1800 --dataset ${dataset}
 
@@ -38,8 +38,6 @@ for dataset in 'nfcorpus' 'scifact' 'trec-covid' 'fiqa' 'scidocs' 'arguana' 'web
     python -m pyserini.eval.trec_eval \
     -c -m recall.100 beir-v1.0.0-${dataset}-test \
     results/run.beir.${model_name}.${dataset}.txt
-
-    rm -r indices/${model_prefix}_${model_name}_${dataset}_index
 
     echo "Completed evaluation for dataset: ${dataset}"
 done

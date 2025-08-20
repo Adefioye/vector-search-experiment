@@ -60,6 +60,10 @@ cp "$LIBS/anserini"/target/anserini-*-SNAPSHOT-fatjar.jar \
 # Make sure faiss-gpu is REMOVED from requirements.txt before this step
 conda run -n $ENV_NAME pip install -r requirements.txt
 
+# Install vllm for query generation
+# echo "Installing vllm..."
+# conda run -n $ENV_NAME pip install vllm --extra-index-url https://download.pytorch.org/whl/cu128
+
 echo -e "\n✅  Dev environment ready:"
 echo "   • conda activate ${ENV_NAME}"
 echo "   • run your scripts: python scripts/.../my_script.py"

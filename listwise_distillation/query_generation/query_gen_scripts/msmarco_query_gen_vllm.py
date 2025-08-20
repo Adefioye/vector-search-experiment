@@ -15,6 +15,7 @@ beir_datasets = ['msmarco', 'fiqa', 'scifact', 'trec-covid', 'nfcorpus', 'arguan
 for dataset in beir_datasets:
 
     msmarco_pairs = []
+    # query_generation/prompt_examples/msmarco_examples.tsv
     with open(f'{PARENT_DIR}/prompt_examples/msmarco_examples.tsv', 'r', encoding='utf-8') as input_pairs:
         for line in input_pairs:
             msmarco_pairs.append(line.strip())
@@ -45,7 +46,7 @@ for dataset in beir_datasets:
         for line in f:
             keep_ids.add(line.strip())
 
-    ds = load_dataset("BeIR/" + dataset, "corpus")['corpus']; id_key='_id'
+    ds = load_dataset("BeIR/" + dataset, "corpus", trust_remote_code=True)['corpus']; id_key='_id'
 
     passages_dict = {}
 

@@ -71,8 +71,11 @@ def split_train_dev(samples, train_file, dev_file, train_ratio=0.9, seed=42):
     print(f"Training and development files have been created:\n- {train_file}\n- {dev_file}")
 
 def main():
-    beir_datasets = ['msmarco', 'fiqa', 'scifact', 'trec-covid', 'nfcorpus', 'arguana', 'webis-touche2020', 'scidocs', 'climate-fever']
-    retrievers = ['nomic-embed-text-v1', 'nomic-embed-text-v1-unsupervised', 'modernbert-embed-base', 'modernbert-embed-base-unsupervised']
+    # beir_datasets = ['msmarco', 'fiqa', 'scifact', 'trec-covid', 'nfcorpus', 'arguana', 'webis-touche2020', 'scidocs', 'climate-fever']
+    # retrievers = ['nomic-embed-text-v1', 'nomic-embed-text-v1-unsupervised', 'modernbert-embed-base', 'modernbert-embed-base-unsupervised']
+
+    beir_datasets = ['scifact', 'nfcorpus']
+    retrievers = ['nomic-embed-text-v1', 'modernbert-embed-base']
 
     for beir_dataset in beir_datasets:  
         for retriever in retrievers:      

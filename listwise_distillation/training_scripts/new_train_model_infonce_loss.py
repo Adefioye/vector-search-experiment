@@ -384,7 +384,7 @@ class Trainer:
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--dataset', type=str, default='msmarco', help='Dataset name')
+    parser.add_argument('--dataset', type=str, default='scifact', help='Dataset name')
     args = parser.parse_args()
 
     config = Config(dataset=args.dataset)

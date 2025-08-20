@@ -28,7 +28,7 @@ for dataset in beir_datasets:
         for line in f:
             keep_ids.add(line.strip())
 
-    ds = load_dataset("BeIR/" + dataset, "corpus")['corpus']; id_key='_id'
+    ds = load_dataset("BeIR/" + dataset, "corpus", trust_remote_code=True)['corpus']; id_key='_id'
 
     passages_dict = {}
 

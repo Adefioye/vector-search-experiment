@@ -15,25 +15,25 @@ query_types=(
 )
 
 retrievers=(
-  nomic-embed-text-v1
-  nomic-embed-text-v1-unsupervised
+  # nomic-embed-text-v1
+  # nomic-embed-text-v1-unsupervised
   modernbert-embed-base
-  modernbert-embed-base-unsupervised
+  # modernbert-embed-base-unsupervised
 )
 
 # -------------- 2. Reranker model to apply ------------------
-model_name="Soyoung97/RankT5-3b"
+model_name="/workspace/vector-search-experiment/rankt5-3b"  # ← swap if you like
 # model_name="BAAI/bge-reranker-v2.5-gemma2-lightweight"  # ← swap if you like
 
 # -------------- 3. Loop over all combinations ---------------
 for retriever in "${retrievers[@]}"; do
-  for dataset in "${beir_datasets[@]}"; do
+  for beir_dataset in "${beir_datasets[@]}"; do
     for qtype in "${query_types[@]}"; do
 
       echo "====================================================="
       echo "🔄  Reranker: $model_name"
       echo "🔵  Retriever: $retriever"
-      echo "📚  Dataset:   $dataset"
+      echo "📚  Dataset:   $beir_dataset"
       echo "🔑  QueryType: $qtype"
       echo "====================================================="
 
@@ -45,7 +45,7 @@ for retriever in "${retrievers[@]}"; do
         continue
       fi
 
-      python listwise_distillation/reranker/reranking.py \
+      python listwise_distillation/reranker/reranking_scripts/reranking.py \
         --model_name  "$model_name" \
         --input_path  "$input_path" \
         --output_path "$output_path"

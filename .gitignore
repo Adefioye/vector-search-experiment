@@ -23,5 +23,17 @@ rerank_inputs/
 rerank_outputs/
 results/
 
+# Folder to ignore for storing synthetic data & models
+generated_queries/
+jsonl_before_reranking/
+jsonl_after_reranking/
+retrieval_runs/
+outputs/
+models/
+rankt5-3b/
+final_data/
+final_outputs/
+
+
 # Add miniconda.sh to the ignore list
 miniconda.sh

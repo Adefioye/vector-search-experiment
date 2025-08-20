@@ -42,11 +42,13 @@ def filter_samples(file_path):
 
     return filtered_samples
 
-beir_datasets = ['msmarco', 'fiqa', 'scifact', 'trec-covid', 'nfcorpus', 'arguana', 'webis-touche2020', 'scidocs', 'climate-fever']
+# beir_datasets = ['msmarco', 'fiqa', 'scifact', 'trec-covid', 'nfcorpus', 'arguana', 'webis-touche2020', 'scidocs']
+beir_datasets = ['scifact', 'nfcorpus']
 
 query_types = ['titles', 'claims', 'questions', 'random', 'msmarco', 'keywords']
 
-retrievers = ['nomic-embed-text-v1', 'nomic-embed-text-v1-unsupervised', 'modernbert-embed-base', 'modernbert-embed-base-unsupervised']
+# retrievers = ['nomic-embed-text-v1', 'nomic-embed-text-v1-unsupervised', 'modernbert-embed-base', 'modernbert-embed-base-unsupervised']
+retrievers = ['nomic-embed-text-v1', 'modernbert-embed-base']
 
 for retriever in retrievers:
     for beir_dataset in beir_datasets:
