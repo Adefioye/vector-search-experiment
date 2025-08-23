@@ -18,7 +18,7 @@ LIBS=$ROOT/libs
 echo "📦  Creating conda env '${ENV_NAME}' (Python ${PY_VER}) ..."
 conda create -y -n $ENV_NAME python=$PY_VER
 conda run -n $ENV_NAME conda install -y -c conda-forge openjdk=21 maven wget
-conda run -n $ENV_NAME conda install -y -c pytorch faiss-gpu   # or faiss-gpu
+conda run -n $ENV_NAME conda install -y -c pytorch faiss-cpu   # or faiss-gpu
 conda run -n $ENV_NAME pip install --upgrade pip torch
 
 # ------------------------------------------------------------------

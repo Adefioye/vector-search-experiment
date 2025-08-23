@@ -143,7 +143,8 @@ Table 5: Retrieval effectiveness for the E5-unsupervised model fine-tuned with h
 
 
 # Training TODOs:
-- Train `modernbert-embed-base` and `nomic-embed-text-v1` on scifact and nfcorpus for INFONCE LOSS.
+- [ ] Train `modernbert-embed-base` and `nomic-embed-text-v1` on fiqa and trec-covid for INFONCE LOSS.
+- [ ] Evaluate finetuned `nomic-embed-text-v1` model on `nfcorpus`.
 - Evaluate trained model on their respective datasets and obtain NDCG@10 and RECALL@100.
 ```
 chmod run_eval_without_reranker.sh

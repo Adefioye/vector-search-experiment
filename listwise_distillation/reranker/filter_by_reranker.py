@@ -43,7 +43,7 @@ def filter_samples(file_path):
     return filtered_samples
 
 # beir_datasets = ['msmarco', 'fiqa', 'scifact', 'trec-covid', 'nfcorpus', 'arguana', 'webis-touche2020', 'scidocs']
-beir_datasets = ['scifact', 'nfcorpus']
+beir_datasets = ['msmarco']
 
 query_types = ['titles', 'claims', 'questions', 'random', 'msmarco', 'keywords']
 

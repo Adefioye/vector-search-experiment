@@ -19,7 +19,7 @@ from transformers import AutoConfig, AutoModel, AutoTokenizer
 from grad_cache.functional import cached, cat_input_tensor
 
 class Config:
-    def __init__(self, dataset='msmarco'):
+    def __init__(self, dataset=''):
         self.dataset = dataset
         self.retriever_k = 20
         self.list_length = 20
@@ -317,12 +317,12 @@ class Trainer:
                 running_contrastive_train_loss += contrastive_loss_val.detach().item()
 
                 # Compute virtual training step
-                virtual_step = (step + 1) // self.config.accumulation_steps
+                # virtual_step = (step + 1) // self.config.accumulation_steps
 
                 # log losses to wandb
-                wandb.log({
-                    "train/infonce_loss": loss.detach().item(),
-                }, step=virtual_step)
+                # wandb.log({
+                #     "train/infonce_loss": loss.detach().item(),
+                # }, step=virtual_step)
 
         avg_contrastive_loss = running_contrastive_train_loss / num_train_batches
 
@@ -384,7 +384,7 @@ class Trainer:
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--dataset', type=str, default='scifact', help='Dataset name')
+    parser.add_argument('--dataset', type=str, default='msmarco', help='Dataset name')
     args = parser.parse_args()
 
     config = Config(dataset=args.dataset)

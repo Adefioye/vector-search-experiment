@@ -84,7 +84,7 @@ class Collator(object):
         return (p['input_ids'], p['attention_mask'].bool(), docids)
 
 def get_tokenizer(model_name):
-    return AutoTokenizer.from_pretrained(model_name)
+    return AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
 
 def main():
     parser = argparse.ArgumentParser()
@@ -96,7 +96,7 @@ def main():
     parser.add_argument('--dataset', type=str, required=True, help='Name of corpus to encode')
 
     args = parser.parse_args()
-
+    # For finetined models, hardcode the model_name as argument to the get_tokenizer function
     tokenizer = get_tokenizer(args.model_name)
     # add back .cuda().eval() if you want to use GPU
     if torch.cuda.is_available():
