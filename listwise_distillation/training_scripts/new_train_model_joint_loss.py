@@ -30,16 +30,17 @@ class Config:
         self.lr = 2e-4
         self.rank_temp = 0.05
         self.kl_temp = 0.3
+        self.contrastive_loss_weight = 0.1
         self.instruction = "search_query: "
         self.query_maxlength = 64
         self.text_maxlength = 512
         self.num_epochs = 30
         self.weight_decay = 0.01
-        self.model_name_or_path = 'nomic-ai/modernbert-embed-base'
+        self.model_name_or_path = 'nomic-ai/nomic-embed-text-v1'
         self.save_model = True
         self.threshold_score = 0.6
-        self.retriever = 'modernbert-embed-base'
-        self.save_model_name = f"models/{self.retriever}_{self.dataset}-infonce-loss"
+        self.retriever = 'nomic-embed-text-v1'
+        self.save_model_name = f"models/{self.dataset}_{self.retriever}-joint-loss"
         self.train_file_path = f'final_data/beir.{self.retriever}.{self.dataset}.train.generated_queries.listwise.jsonl'
         self.dev_file_path = f'final_data/beir.{self.retriever}.{self.dataset}.dev.generated_queries.listwise.jsonl'
         
@@ -167,7 +168,25 @@ class Trainer:
         self.scheduler = scheduler
         self.config = config
         self.best_overall_dev_loss = float('inf')
+        self.best_rank_dev_loss = float('inf')
+        self.best_contrastive_dev_loss = float('inf')
         self.non_improvement_count = 0
+        self.kl_loss = nn.KLDivLoss(reduction="batchmean", log_target=True)
+
+    @cat_input_tensor
+    def rank_loss(self, query_embeddings, all_passage_embeddings, all_passage_scores):
+        bs = len(query_embeddings)
+        all_passage_embeddings = all_passage_embeddings.reshape(bs, self.config.list_length, -1)
+        y_preds = torch.bmm(all_passage_embeddings, query_embeddings.unsqueeze(-1)).squeeze(-1).double()
+        all_passage_scores = torch.tensor(all_passage_scores).cuda().reshape(bs, self.config.list_length)
+        rank_temp = torch.tensor(self.config.rank_temp).double()
+        kl_temp = torch.tensor(self.config.kl_temp).double()
+
+        y_preds = F.log_softmax(y_preds / rank_temp, dim=-1)        
+        all_passage_scores = F.log_softmax(all_passage_scores / kl_temp, dim=-1)
+
+        loss = self.kl_loss(y_preds, all_passage_scores).float()
+        return loss
 
     @cat_input_tensor
     def contrastive_loss(self, query_embeddings, all_passage_embeddings, all_ids, all_passage_scores):
@@ -259,6 +278,7 @@ class Trainer:
         closures_all_passage = []
 
         running_contrastive_train_loss = 0.0
+        running_rank_train_loss = 0.0
         num_train_batches = 0
 
         self.optimizer.zero_grad()
@@ -293,8 +313,13 @@ class Trainer:
                     cache_all_docids,
                     cache_all_scores
                 )
+                rank_loss_val = self.rank_loss(
+                    cache_query_embeddings,
+                    cache_all_passage_embeddings,
+                    cache_all_scores,
+                )
 
-                loss = contrastive_loss_val
+                loss = contrastive_loss_val * self.config.contrastive_loss_weight + rank_loss_val
                 loss.backward()
 
                 for f, r in zip(closures_query, cache_query_embeddings):
@@ -315,20 +340,15 @@ class Trainer:
                 self.optimizer.zero_grad()
 
                 running_contrastive_train_loss += contrastive_loss_val.detach().item()
-
-                # Compute virtual training step
-                # virtual_step = (step + 1) // self.config.accumulation_steps
-
-                # log losses to wandb
-                # wandb.log({
-                #     "train/infonce_loss": loss.detach().item(),
-                # }, step=virtual_step)
+                running_rank_train_loss += rank_loss_val.detach().item()
 
         avg_contrastive_loss = running_contrastive_train_loss / num_train_batches
+        avg_rank_loss = running_rank_train_loss / num_train_batches
 
         print("TRAIN CONTRASTIVE LOSS", avg_contrastive_loss)
+        print("TRAIN RANK LOSS", avg_rank_loss)
 
-        return avg_contrastive_loss
+        return avg_contrastive_loss, avg_rank_loss
 
     def evaluate(self, dev_dataloader):
         self.model.eval()
@@ -337,6 +357,7 @@ class Trainer:
         cache_all_docids = []
         cache_all_scores = []
         total_contrastive_loss = 0.0
+        total_listwise_loss = 0.0
         num_batches = 0
 
         with torch.no_grad():
@@ -369,7 +390,14 @@ class Trainer:
                         cache_all_scores
                     ).detach().cpu()
 
+                    listwise_loss_val = self.rank_loss(
+                        cache_query_embeddings,
+                        cache_all_passage_embeddings,
+                        cache_all_scores,
+                    ).detach().cpu()
+
                     total_contrastive_loss += contrastive_loss_val.item()
+                    total_listwise_loss += listwise_loss_val.item()
 
                     cache_query_embeddings = []
                     cache_all_passage_embeddings = []
@@ -377,21 +405,23 @@ class Trainer:
                     cache_all_scores = []
 
         avg_contrastive_loss = total_contrastive_loss / num_batches
+        avg_rank_loss = total_listwise_loss / num_batches
 
         print("CONTRASTIVE DEV LOSS", avg_contrastive_loss)
+        print("LISTWISE DEV LOSS", avg_rank_loss)
 
-        return avg_contrastive_loss
+        return avg_contrastive_loss, avg_rank_loss
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--dataset', type=str, default='fiqa', help='Dataset name')
+    parser.add_argument('--dataset', type=str, default='msmarco', help='Dataset name')
     args = parser.parse_args()
 
     config = Config(dataset=args.dataset)
 
      # ─── START W&B ──────────────────────────────
     wandb.init(
-        project=f"{config.retriever}-infonce-loss",       
+        project=f"{config.retriever}-infonce+kl-loss",       
         name=f"{config.dataset}" 
     )
     wandb.config.update(vars(config))         # log all hyperparams
@@ -470,12 +500,16 @@ def main():
 
     for epoch in range(config.num_epochs + 1):
         print("Evaluating on dev set for epoch", epoch)
-        avg_contrastive_loss_dev = trainer.evaluate(dev_dataloader)
+        avg_contrastive_loss_dev, avg_rank_loss_dev = trainer.evaluate(dev_dataloader)
 
         trainer.non_improvement_count += 1
 
-        if (avg_contrastive_loss_dev < trainer.best_overall_dev_loss):
-            trainer.best_overall_dev_loss = avg_contrastive_loss_dev
+        if (avg_rank_loss_dev < trainer.best_rank_dev_loss):
+            trainer.best_rank_dev_loss = avg_rank_loss_dev
+            trainer.non_improvement_count = 0
+
+        if ((avg_contrastive_loss_dev * config.contrastive_loss_weight + avg_rank_loss_dev) < trainer.best_overall_dev_loss):
+            trainer.best_overall_dev_loss = avg_contrastive_loss_dev * config.contrastive_loss_weight + avg_rank_loss_dev
             trainer.non_improvement_count = 0
 
             if config.save_model:
@@ -483,22 +517,23 @@ def main():
                     f"{config.save_model_name}"
                 )
                 emb_model.bert.save_pretrained(model_save_name)
-                print(f"Saved contrastive model to {model_save_name}")
-            
+                print(f"Saved model to {model_save_name}")
+                
         if trainer.non_improvement_count >= 2:
             print("Early stopping due to no improvement in validation loss.")
             break
 
         if epoch == config.num_epochs:
             break
-            
+
         print("TRAINING for epoch", epoch)
-        avg_contrastive_loss_train = trainer.train(train_dataloader)
+        avg_contrastive_loss_train, avg_rank_loss_train = trainer.train(train_dataloader)
         # Do per-epoch logging for joint loss
+        
         wandb.log({
-            "train/avg_infonce_loss": avg_contrastive_loss_train,
-            "dev/avg_infonce_loss": avg_contrastive_loss_dev,
-            "best/avg_infonce_loss": trainer.best_overall_dev_loss,
+            "train/avg_rank_loss": avg_rank_loss_train,
+            "dev/avg_rank_loss": avg_rank_loss_dev,
+            "best/avg_overall_loss": trainer.best_overall_dev_loss,
         }, step=epoch)
 
 if __name__ == "__main__":

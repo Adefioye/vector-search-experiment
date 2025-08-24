@@ -19,7 +19,7 @@ from transformers import AutoConfig, AutoModel, AutoTokenizer
 from grad_cache.functional import cached, cat_input_tensor
 
 class Config:
-    def __init__(self, dataset='msmarco'):
+    def __init__(self, dataset=''):
         self.dataset = dataset
         self.retriever_k = 20
         self.list_length = 20

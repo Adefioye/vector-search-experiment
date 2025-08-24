@@ -1,5 +1,5 @@
 from transformers import AutoTokenizer
-dataset = 'fiqa'
+dataset = 'msmarco'
 # model_name = 'modernbert-embed-base'
 model_name = 'nomic-embed-text-v1'
 model=f'models/{model_name}_{dataset}-infonce-loss'

@@ -7,6 +7,7 @@ for model_name in 'nomic-embed-text-v1'; do
     model_prefix=models
 
     # Encoding the corpus
+    echo "Encoding corpus for model: $model_name on dataset: $dataset"
     python listwise_distillation/encoding/encode_corpus.py --model_name ${model} --normalize --pooling mean --batch_size 1800 --dataset ${dataset}
 
     # Searching for d19
