@@ -74,7 +74,7 @@ def main():
     # beir_datasets = ['msmarco', 'fiqa', 'scifact', 'trec-covid', 'nfcorpus', 'arguana', 'webis-touche2020', 'scidocs', 'climate-fever']
     # retrievers = ['nomic-embed-text-v1', 'nomic-embed-text-v1-unsupervised', 'modernbert-embed-base', 'modernbert-embed-base-unsupervised']
 
-    beir_datasets = ['msmarco']
+    beir_datasets = ['arguana', 'scidocs']
     retrievers = ['nomic-embed-text-v1', 'modernbert-embed-base']
 
     for beir_dataset in beir_datasets:  

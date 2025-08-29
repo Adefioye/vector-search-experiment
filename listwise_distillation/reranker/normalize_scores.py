@@ -4,7 +4,7 @@ from tqdm import tqdm
 import os
 
 # beir_datasets=['msmarco', 'fiqa', 'scifact', 'trec-covid', 'nfcorpus', 'arguana', 'webis-touche2020', 'scidocs', 'climate-fever']
-beir_datasets = ['msmarco']
+beir_datasets = ['arguana', 'scidocs']
 
 query_types = ['titles', 'claims', 'questions', 'random', 'msmarco', 'keywords']
 

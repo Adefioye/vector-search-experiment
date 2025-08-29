@@ -1,6 +1,6 @@
 dataset=msmarco
 
-for model_name in 'nomic-embed-text-v1'; do
+for model_name in 'modernbert-embed-base'; do
 
     # Set essential model variables
     model=models/${model_name}_${dataset}-infonce-loss

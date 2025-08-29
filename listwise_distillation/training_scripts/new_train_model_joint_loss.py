@@ -34,13 +34,13 @@ class Config:
         self.instruction = "search_query: "
         self.query_maxlength = 64
         self.text_maxlength = 512
-        self.num_epochs = 30
+        self.num_epochs = 10
         self.weight_decay = 0.01
-        self.model_name_or_path = 'nomic-ai/nomic-embed-text-v1'
+        self.model_name_or_path = 'nomic-ai/modernbert-embed-base'
         self.save_model = True
         self.threshold_score = 0.6
-        self.retriever = 'nomic-embed-text-v1'
-        self.save_model_name = f"models/{self.dataset}_{self.retriever}-joint-loss"
+        self.retriever = 'modernbert-embed-base'
+        self.save_model_name = f"models/{self.retriever}_{self.dataset}-joint-loss"
         self.train_file_path = f'final_data/beir.{self.retriever}.{self.dataset}.train.generated_queries.listwise.jsonl'
         self.dev_file_path = f'final_data/beir.{self.retriever}.{self.dataset}.dev.generated_queries.listwise.jsonl'
         
